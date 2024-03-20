@@ -15,9 +15,9 @@
       <div class="col-md-3">
         <div class="card">
           <h4 class="card-header">Moins important</h4>
-          <div class="card-body">
+          <div class="card-body overflow-auto" style="max-height: 800px !important">
             <draggable
-              :list="cardNoImportant"
+              v-model="cardNoImportant"
               tag="div"
               itemKey="id"
               group="cardElement"
@@ -26,9 +26,7 @@
               <template #item="{ element, index }">
                 <div
                   v-bind:id="element.id"
-                  :class="{
-                  card: 'card',
-                }"
+                  class="card"
                   v-show="{ index }"
                 >
                   <div class="card-body" style="cursor: grab">
@@ -46,21 +44,18 @@
       <div class="col-md-3">
         <div class="card">
           <h4 class="card-header">Cartes à organisé</h4>
-          <div class="card-body">
+          <div class="card-body overflow-auto" style="max-height: 800px !important">
             <draggable
-              :list="cardsSources"
+              v-model="cardsSources"
               tag="div"
               itemKey="id"
               group="cardElement"
               class="vstack gap-3"
-              @change="listCardSourceListener"
             >
               <template #item="{ element, index }">
                 <div
                   v-bind:id="element.id"
-                  :class="{
-                  card: 'card',
-                }"
+                  :class="{ card: 'card' }"
                   v-show="{ index }"
                 >
                   <div class="card-body" style="cursor: grab">
@@ -78,7 +73,7 @@
       <div class="col-md-3">
         <div class="card">
           <h4 class="card-header">Plus important</h4>
-          <div class="card-body">
+          <div class="card-body overflow-auto" style="max-height: 800px !important">
             <draggable
               :list="cardImportant"
               tag="div"
@@ -89,9 +84,7 @@
               <template #item="{ element, index }">
                 <div
                   v-bind:id="element.id"
-                  :class="{
-                  card: 'card',
-                }"
+                  :class="{ card: 'card' }"
                   v-show="{ index }"
                 >
                   <div class="card-body" style="cursor: grab">
@@ -113,44 +106,11 @@
 import cardsSource from "../../assets/datas/cards.json";
 // import nuxtStorage from 'nuxt-storage/nuxt-storage'
 import draggable from "vuedraggable";
-//
+
 const previewCardElements = ref("");
 const cardChoosen = ref([]);
 const cardImportant = ref([]);
 const cardNoImportant = ref([]);
-const cardsSources = [...cardsSource];
-
-function listCardListener(event) {
-  if (event) {
-    if (event.added) {
-      console.log("CARD HAS BEEN ADDED");
-      cardChoosen.value.push(event.added.element);
-    }
-    if (event.removed) {
-      console.log("CARD HAS BEEN REMOVED");
-      cardChoosen.value.splice(event.removed.element.id, 1);
-    }
-  }
-}
-
-function listCardSourceListener(event) {
-  if (event) {
-    if (event.added) {
-      console.log("CARD HAS BEEN ADDED");
-      cardsSources.push(event.added.element);
-    }
-    if (event.removed) {
-      console.log("CARD HAS BEEN REMOVED");
-      console.log(cardsSources.length);
-      cardsSources.splice(event.removed.oldIndex, 1);
-      console.log(cardsSources.length);
-    }
-  }
-}
-
-watch(cardsSources, (newValue) => {
-  console.log("cardsSources");
-  console.log(newValue);
-});
+const cardsSources = ref([...cardsSource]);
 
 </script>

@@ -29,7 +29,6 @@ import nuxtStorage from 'nuxt-storage/nuxt-storage'
 const participantName = ref("");
 const startSession = function () {
   nuxtStorage.localStorage.setData("player", participantName.value);
-  alert(`Le joueur ${participantName.value} est enregistré`);
   this.$router.push("/cards");
 }
 
