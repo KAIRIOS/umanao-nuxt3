@@ -28,6 +28,7 @@ import nuxtStorage from 'nuxt-storage/nuxt-storage'
 
 const participantName = ref("");
 const startSession = function () {
+  resetSession();
   nuxtStorage.localStorage.setData("player", participantName.value);
   this.$router.push("/cards");
 }
