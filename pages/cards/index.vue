@@ -73,7 +73,7 @@
                   v-show="{ index }"
                 >
                   <div class="card-body" style="cursor: grab">
-                    <h5 class="card-title">{{ element.name }}</h5>
+                    <h5 class="card-title">Card name: {{ element.name }}</h5>
                     <span class="card-text">
                       {{ element.texte }}
                     </span>
