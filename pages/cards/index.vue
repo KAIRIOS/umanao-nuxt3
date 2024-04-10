@@ -44,7 +44,6 @@
                   v-show="{ index }"
                 >
                   <div class="card-body" style="cursor: grab">
-                    <h5 class="card-title">{{ element.name }}</h5>
                     <span class="card-text">
                       {{ element.texte }}
                     </span>
@@ -73,7 +72,6 @@
                   v-show="{ index }"
                 >
                   <div class="card-body" style="cursor: grab">
-                    <h5 class="card-title">Card name: {{ element.name }}</h5>
                     <span class="card-text">
                       {{ element.texte }}
                     </span>
@@ -102,7 +100,6 @@
                   v-show="{ index }"
                 >
                   <div class="card-body" style="cursor: grab">
-                    <h5 class="card-title">{{ element.name }}</h5>
                     <span class="card-text">
                       {{ element.texte }}
                     </span>
@@ -154,10 +151,11 @@ function deleteCardFromStorage(cardsStorage, cardsSources) {
 
 function registerCard() {
   // S'il nous reste des cartes a organiser, on met un message d'erreur
-  if (cardsSources.value.length > 0) {
-    error.value = "Il vous reste des cartes à organiser"
-    return
-  }
+  // TODO: A remettre quand valider par le client
+  // if (cardsSources.value.length > 0) {
+  //   error.value = "Il vous reste des cartes à organiser"
+  //   return
+  // }
   error.value = ''
   // On save dans le localStorage les cartes dans les différentes listes
   nuxtStorage.localStorage.setData('cardImportant', JSON.stringify(cardImportant.value), 4, 'h')
