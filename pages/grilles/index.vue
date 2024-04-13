@@ -1,31 +1,18 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3 vstack gap-2">
-        <div>
+      <div class="col-md-2 vstack gap-2">
+        <div class="hstack gap-2">
           <NuxtLink to="/cards" class="btn btn-primary color-black">Voir les cartes</NuxtLink>
-        </div>
-        <div>
           <NuxtLink to="/results" class="btn btn-primary color-black">Voir le résultat</NuxtLink>
         </div>
         <h3 class="m-0">Grille</h3>
         <div class="vstack gap-2">
           <span>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam at
-            molestie nibh. Nam non dolor eu urna malesuada congue sit amet luctus
-            quam. Vivamus vel nibh ac augue porttitor euismod in et libero. Duis
-            blandit sit amet magna eu placerat. Vestibulum magna elit, congue sed
-            dolor sed, tempor aliquam tortor. Aliquam venenatis augue id efficitur
-            ultrices. Phasellus fermentum justo vel mattis auctor.
+            Ici vous devez estimé l'importance des cartes.
           </span>
-          <h2>Consigne</h2>
-          <div class="vstack">
-            <span class="text-danger fw-bold">01 À 20 : Important</span>
-            <span class="text-warning fw-bold">21 À 65 : Modéré</span>
-            <span class="text-primary fw-bold">65 À 100 : Moins important</span>
-          </div>
           <div class="card">
-            <div class="card-body overflow-auto" style="height: 350px !important">
+            <div class="card-body overflow-auto" style="height: 656px !important">
               <draggable
                 v-model="cards"
                 tag="div"
@@ -51,14 +38,14 @@
           </div>
         </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-md-10">
         <div class="card">
           <div class="card-body" style="height: 800px !important">
             <VueFlow
               v-model="elements"
               :default-viewport="{ zoom: 1 }"
-              :max-zoom="400"
-              :min-zoom="0.001"
+              :max-zoom="0.75"
+              :min-zoom="0.25"
               :nodes-draggable="false"
               :fit-view-on-init="true"
               :nodes-connectable="false"
@@ -70,6 +57,11 @@
               <template #node-special="specialNodeProps">
                 <CustomNode v-bind="specialNodeProps" @delete="deleteCard"/>
               </template>
+              <Controls>
+                <ControlButton>
+                  <i class="fa fa-plus"></i>
+                </ControlButton>
+              </Controls>
             </VueFlow>
           </div>
         </div>
@@ -79,36 +71,19 @@
 </template>
 <script setup lang="ts">
 import { VueFlow } from '@vue-flow/core'
+import { Controls, ControlButton } from '@vue-flow/controls'
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
 import draggable from "vuedraggable";
 import CustomNode from '~/components/CustomNode.vue'
+import nodesTools from '~/tools/nodes.js'
 
-function generateNodes(x = 10, y = 10) {
-  const ret = []
-  let id = 1;
-  for (let yi = 0; yi < y; yi++) {
-    for (let xi = 0; xi < x; xi++) {
-      ret.push({
-        id: '' + xi + '-' + yi,
-        type: 'special',
-        position: {
-          x: xi * 300,
-          y: yi * 300,
-        },
-        data: {
-          value: id,
-          card: [],
-        }
-      })
-      id++
-    }
-  }
 
-  return ret;
-}
-
-const elements = ref(generateNodes())
+const elements = ref(nodesTools.generate(10, 10, 1))
 const cards = ref([]);
+
+function deleteCard(cardFromGrill) {
+  cards.value = [...cards.value, ...cardFromGrill]
+}
 
 onMounted(() => {
   // On recupère les cartes présente dans le localStorage
@@ -119,11 +94,6 @@ onMounted(() => {
   if (cardImportantStorage) cards.value = [...cards.value, ...cardImportantStorage]
   if (cardNoImportantStorage)  cards.value = [...cards.value, ...cardNoImportantStorage]
 })
-
-function deleteCard(cardFromGrill) {
-  console.log('cards')
-  cards.value = [...cards.value, ...cardFromGrill]
-}
 </script>
 
 <style>
@@ -132,4 +102,7 @@ function deleteCard(cardFromGrill) {
 
 /* import the default theme, this is optional but generally recommended */
 @import '@vue-flow/core/dist/theme-default.css';
+
+/* Import des styles pour les controls */
+@import '@vue-flow/controls/dist/style.css';
 </style>

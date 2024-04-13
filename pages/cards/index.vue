@@ -1,21 +1,19 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3 vstack gap-2">
-        <div>
+      <div class="col-md-3 vstack gap-3">
+        <div class="hstack gap-2">
+<!--          <NuxtLink to="/repartition" class="btn btn-primary color-black">Suite</NuxtLink>-->
           <NuxtLink to="/grilles" class="btn btn-primary color-black">Voir la grille</NuxtLink>
         </div>
-        <h3 class="m-0">Cards</h3>
+
+        <h3 class="m-0">Répartition des cartes</h3>
         <span>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Etiam at molestie nibh. Nam non dolor eu urna malesuada congue sit amet luctus quam.
-          Vivamus vel nibh ac augue porttitor euismod in et libero.
+          Ici vous pouvez organiser les cartes en fonction de leur importance.
         </span>
         <div class="vstack gap-2">
-          <div>
+          <div class="hstack gap-2">
             <button class="btn btn-primary" @click="registerCard">Enregistrer</button>
-          </div>
-          <div>
             <button class="btn btn-danger" @click="resetCards">Recommencer</button>
           </div>
           <div v-if="error.length > 0" class="col-md-9 alert alert-danger w-100">
