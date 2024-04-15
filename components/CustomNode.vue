@@ -12,8 +12,7 @@ function cutText(value, strLength = 30) {
 }
 
 function handleDelete() {
-  const card = props.data.card
-  emit('delete', card)
+  emit('delete', props.data.card)
   props.data.card = []
 }
 
@@ -35,7 +34,7 @@ function handleDelete() {
             :class="{ card: 'card' }"
             v-show="{ index }"
           >
-            <div class="card-body textClass" style="height: 188px;">
+            <div class="card-body border textClass" style="height: 186px;">
               <div class="card-text">
                 {{ element.texte }}
               </div>
@@ -43,7 +42,7 @@ function handleDelete() {
           </div>
         </template>
       </draggable>
-      <button v-if="props.data.card.length" @click="handleDelete" class="btn btn-outline-danger">Supprimer</button>
+      <button v-if="props.data.card.length" @click="handleDelete" class="btn btn-outline-secondary">Repositionner</button>
   </div>
 </template>
 

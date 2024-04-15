@@ -12,7 +12,7 @@
             Ici vous devez estimé l'importance des cartes.
           </span>
           <div class="card">
-            <div class="card-body overflow-auto" style="height: 656px !important">
+            <div class="card-body overflow-auto" style="height: 680px !important">
               <draggable
                 v-model="cards"
                 tag="div"
@@ -23,7 +23,8 @@
                 <template #item="{ element, index }">
                   <div
                     v-bind:id="element.id"
-                    :class="{ card: 'card' }"
+                    class="card"
+                    :class="element.id === idLastReposition ? 'border-primary' : ''"
                     v-show="{ index }"
                   >
                     <div class="card-body" style="cursor: grab">
@@ -44,7 +45,7 @@
             <VueFlow
               v-model="elements"
               :default-viewport="{ zoom: 1 }"
-              :max-zoom="0.75"
+              :max-zoom="0.85"
               :min-zoom="0.25"
               :nodes-draggable="false"
               :fit-view-on-init="true"
@@ -80,9 +81,13 @@ import nodesTools from '~/tools/nodes.js'
 
 const elements = ref(nodesTools.generate(10, 10, 1))
 const cards = ref([]);
+const idLastReposition = ref(null);
 
 function deleteCard(cardFromGrill) {
-  cards.value = [...cards.value, ...cardFromGrill]
+  const card = [...cardFromGrill][0]
+  idLastReposition.value = card.id
+  // On récupère la carte à supprimer pour la remettre en haut de la liste
+  cards.value.unshift(card)
 }
 
 onMounted(() => {
