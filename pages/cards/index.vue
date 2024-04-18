@@ -3,13 +3,13 @@
     <div class="row">
       <div class="col-md-3 vstack gap-3">
         <div class="hstack gap-2">
-<!--          <NuxtLink to="/repartition" class="btn btn-primary color-black">Suite</NuxtLink>-->
-          <NuxtLink to="/grilles" class="btn btn-primary color-black">Voir la grille</NuxtLink>
+          <NuxtLink to="/repartition" class="btn btn-primary color-black">Etape 2</NuxtLink>
+          <NuxtLink to="/grilles" class="btn btn-primary color-black">Etape 3</NuxtLink>
         </div>
 
-        <h3 class="m-0">Répartition des cartes</h3>
+        <h3 class="m-0">Consignes</h3>
         <span>
-          Ici vous pouvez organiser les cartes en fonction de leur importance.
+          mettre chaque carte de la colonne de gauche à l’écran sur une des 2 zones selon que vous estimez le contenu de la carte plutôt moins important ou plutôt plus important
         </span>
         <div class="vstack gap-2">
           <div class="hstack gap-2">
@@ -54,7 +54,7 @@
       </div>
       <div class="col-md-3">
         <div class="card">
-          <h4 class="card-header">Cartes à organisé</h4>
+          <h4 class="card-header">Cartes à trier</h4>
           <div class="card-body overflow-auto" style="max-height: 800px !important">
             <draggable
               v-model="cardsSources"

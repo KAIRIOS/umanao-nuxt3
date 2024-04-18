@@ -3,17 +3,21 @@
     <div class="row">
       <div class="col-md-2 vstack gap-3">
         <div class="hstack gap-2">
-          <NuxtLink to="/grilles" class="btn btn-primary color-black">Voir la grille</NuxtLink>
+          <NuxtLink to="/cards" class="btn btn-primary color-black">Etape 1</NuxtLink>
+          <NuxtLink to="/grilles" class="btn btn-primary color-black">Etape 3</NuxtLink>
         </div>
 
-        <h3 class="m-0">Répartition des cartes</h3>
-        <span>
-          Ici vous pouvez organiser les cartes en fonction de leur importance.
-        </span>
+        <h3 class="m-0">Consignes</h3>
+        <span>Répartissez le tas de cartes de l’étape 1 en 2 sous tas :</span>
+        <span>1: Le tas de cartes « plutôt moins important » en 2 sous tas (formulation sera revue, ndlr)  « -- » et «-» </span>
+        <span>1: Le tas de cartes « plutôt plus important » en 2 sous tas « + » et «++»  </span>
         <div class="vstack gap-2">
           <div class="hstack gap-2">
-            <button class="btn btn-primary" @click="console.log('click Register')">Enregistrer</button>
-            <button class="btn btn-danger" @click="console.log('click Reset')">Recommencer</button>
+            <button class="btn btn-primary" @click="registerCard">Enregistrer</button>
+            <button class="btn btn-danger" @click="resetCards">Recommencer</button>
+          </div>
+          <div v-if="save.length > 0" class="col-md-9 alert alert-success w-100">
+            {{ save }}
           </div>
         </div>
       </div>
@@ -21,97 +25,171 @@
         <div class="row">
           <div class="col-md-3">
             <div class="card">
-              <h4 class="card-header">Important</h4>
-              <div class="card-body overflow-hidden p-0" style="height: 500px !important;">
-                <VueFlow
-                  v-model="elementsImportant"
-                  :default-viewport="{ zoom: 1 }"
-                  :max-zoom="0.75"
-                  :min-zoom="0.26"
-                  :nodes-draggable="false"
-                  :fit-view-on-init="true"
-                  :nodes-connectable="false"
-                  :zoom-on-double-click="false"
-                  :snap-to-grid="true"
-                  :elements-selectable="true"
+              <h4 class="card-header">Pas important du tout</h4>
+              <div class="card-body overflow-auto" style="height: 500px !important">
+                <draggable
+                  v-model="cardsPasImportant"
+                  tag="div"
+                  itemKey="id"
+                  group="cardElement"
+                  class="vstack gap-3"
                 >
-                  <template #node-special="specialNodeProps">
-                    <CustomNode v-bind="specialNodeProps" @delete="console.log('Delete Cards')" />
+                  <template #item="{ element, index }">
+                    <div
+                      v-bind:id="element.id"
+                      :class="{ card: 'card' }"
+                      v-show="{ index }"
+                    >
+                      <div class="card-body" style="cursor: grab">
+                        <span class="card-text">
+                          {{ element.texte }}
+                        </span>
+                      </div>
+                    </div>
                   </template>
-                  <Controls position="bottom-right" :showZoom="false" :showInteractive="false"/>
-                </VueFlow>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card">
-              <h4 class="card-header">Moins important</h4>
-              <div class="card-body overflow-hidden" style="height: 500px !important">
-                <VueFlow
-                  v-model="elementsMoinsImportant"
-                  :default-viewport="{ zoom: 1 }"
-                  :max-zoom="0.75"
-                  :min-zoom="0.26"
-                  :nodes-draggable="false"
-                  :fit-view-on-init="true"
-                  :nodes-connectable="false"
-                  :zoom-on-double-click="false"
-                  :snap-to-grid="true"
-                  :elements-selectable="true"
-                >
-                  <template #node-special="specialNodeProps">
-                    <CustomNode v-bind="specialNodeProps" @delete="console.log('Delete Cards')" />
-                  </template>
-                  <Controls position="bottom-right" :showZoom="false" :showInteractive="false"/>
-                </VueFlow>
+                </draggable>
               </div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="card">
               <h4 class="card-header">Peu important</h4>
-              <div class="card-body overflow-hidden" style="height: 500px !important">
-                <VueFlow
-                  v-model="elementsPeuImportant"
-                  :default-viewport="{ zoom: 1 }"
-                  :max-zoom="0.75"
-                  :min-zoom="0.26"
-                  :nodes-draggable="false"
-                  :fit-view-on-init="true"
-                  :nodes-connectable="false"
-                  :zoom-on-double-click="false"
-                  :snap-to-grid="true"
-                  :elements-selectable="true"
+              <div class="card-body overflow-auto" style="height: 500px !important">
+                <draggable
+                  v-model="cardsMoinsImportant"
+                  tag="div"
+                  itemKey="id"
+                  group="cardElement"
+                  class="vstack gap-3"
                 >
-                  <template #node-special="specialNodeProps">
-                    <CustomNode v-bind="specialNodeProps" @delete="console.log('Delete Cards')" />
+                  <template #item="{ element, index }">
+                    <div
+                      v-bind:id="element.id"
+                      :class="{ card: 'card' }"
+                      v-show="{ index }"
+                    >
+                      <div class="card-body" style="cursor: grab">
+                        <span class="card-text">
+                          {{ element.texte }}
+                        </span>
+                      </div>
+                    </div>
                   </template>
-                  <Controls position="bottom-right" :showZoom="false" :showInteractive="false"/>
-                </VueFlow>
+                </draggable>
               </div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="card">
-              <h4 class="card-header">Pas important du tout</h4>
-              <div class="card-body overflow-hidden" style="height: 500px !important">
-                <VueFlow
-                  v-model="elementsPasImportant"
-                  :default-viewport="{ zoom: 1 }"
-                  :max-zoom="0.75"
-                  :min-zoom="0.26"
-                  :nodes-draggable="false"
-                  :fit-view-on-init="true"
-                  :nodes-connectable="false"
-                  :zoom-on-double-click="false"
-                  :snap-to-grid="true"
-                  :elements-selectable="true"
+              <h4 class="card-header">Moins important</h4>
+              <div class="card-body overflow-auto" style="height: 500px !important">
+                <draggable
+                  v-model="cardsPeuImportant"
+                  tag="div"
+                  itemKey="id"
+                  group="cardElement"
+                  class="vstack gap-3"
                 >
-                  <template #node-special="specialNodeProps">
-                    <CustomNode v-bind="specialNodeProps" @delete="console.log('Delete Cards')" />
+                  <template #item="{ element, index }">
+                    <div
+                      v-bind:id="element.id"
+                      :class="{ card: 'card' }"
+                      v-show="{ index }"
+                    >
+                      <div class="card-body" style="cursor: grab">
+                        <span class="card-text">
+                          {{ element.texte }}
+                        </span>
+                      </div>
+                    </div>
                   </template>
-                  <Controls position="bottom-right" :showZoom="false" :showInteractive="false"/>
-                </VueFlow>
+                </draggable>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <h4 class="card-header">Important</h4>
+              <div class="card-body overflow-auto" style="height: 500px !important;">
+                <draggable
+                  v-model="cardsVeryImportant"
+                  tag="div"
+                  itemKey="id"
+                  group="cardElement"
+                  class="vstack gap-3"
+                >
+                  <template #item="{ element, index }">
+                    <div
+                      v-bind:id="element.id"
+                      :class="{ card: 'card' }"
+                      v-show="{ index }"
+                    >
+                      <div class="card-body" style="cursor: grab">
+                        <span class="card-text">
+                          {{ element.texte }}
+                        </span>
+                      </div>
+                    </div>
+                  </template>
+                </draggable>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <div class="card">
+              <h4 class="card-header">Pas important</h4>
+              <div class="card-body overflow-auto" style="height: 300px !important">
+                <draggable
+                  v-model="cardsNoImportant"
+                  tag="div"
+                  itemKey="id"
+                  group="cardElement"
+                  class="vstack gap-3"
+                >
+                  <template #item="{ element, index }">
+                    <div
+                      v-bind:id="element.id"
+                      :class="{ card: 'card' }"
+                      v-show="{ index }"
+                    >
+                      <div class="card-body" style="cursor: grab">
+                        <span class="card-text">
+                          {{ element.texte }}
+                        </span>
+                      </div>
+                    </div>
+                  </template>
+                </draggable>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <h4 class="card-header">Important</h4>
+              <div class="card-body overflow-auto" style="height: 300px !important">
+                <draggable
+                  v-model="cardsImportant"
+                  tag="div"
+                  itemKey="id"
+                  group="cardElement"
+                  class="vstack gap-3"
+                >
+                  <template #item="{ element, index }">
+                    <div
+                      v-bind:id="element.id"
+                      :class="{ card: 'card' }"
+                      v-show="{ index }"
+                    >
+                      <div class="card-body" style="cursor: grab">
+                        <span class="card-text">
+                          {{ element.texte }}
+                        </span>
+                      </div>
+                    </div>
+                  </template>
+                </draggable>
               </div>
             </div>
           </div>
@@ -122,18 +200,19 @@
 </template>
 <script setup lang="ts">
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
-import { ref, onMounted } from 'vue'
-import { VueFlow } from '@vue-flow/core'
-import { Controls } from '@vue-flow/controls'
-import CustomNode from '~/components/CustomNode.vue'
-import nodesTools from '~/tools/nodes.js'
+import draggable from "vuedraggable";
+import { ref } from 'vue'
+import cardsSource from 'assets/datas/cards.json'
 
-const cards = ref([]);
-const elementsImportant = ref(nodesTools.generate(5, 5, 1))
-const elementsMoinsImportant = ref(nodesTools.generate(5, 5, 26))
-const elementsPeuImportant = ref(nodesTools.generate(5, 5, 51))
-const elementsPasImportant = ref(nodesTools.generate(5, 5, 76))
+const cardsImportant = ref([]);
+const cardsNoImportant = ref([]);
 
+const cardsPasImportant = ref([]);
+const cardsPeuImportant = ref([]);
+const cardsMoinsImportant = ref([]);
+const cardsVeryImportant = ref([]);
+
+const save = ref('');
 
 onMounted(() => {
   // On recupère les cartes présente dans le localStorage
@@ -141,8 +220,43 @@ onMounted(() => {
   const cardNoImportantStorage = JSON.parse(nuxtStorage.localStorage.getData('cardNoImportant'));
 
   // On récupère les informations du LocalStorage
-  if (cardImportantStorage) cards.value = [...cards.value, ...cardImportantStorage]
-  if (cardNoImportantStorage)  cards.value = [...cards.value, ...cardNoImportantStorage]
+  if (cardImportantStorage) cardsImportant.value = [...cardImportantStorage]
+  if (cardNoImportantStorage)  cardsNoImportant.value = [...cardNoImportantStorage]
 })
+
+function registerCard() {
+  const cards = {
+    cardsPasImportant: [...cardsPasImportant.value],
+    cardsPeuImportant: [...cardsPeuImportant.value],
+    cardsMoinsImportant: [...cardsMoinsImportant.value],
+    cardsVeryImportant: [...cardsVeryImportant.value]
+}
+
+  // On save dans le localStorage les cartes dans les différentes listes
+  nuxtStorage.localStorage.setData('cards', JSON.stringify(cards), 4, 'h')
+  save.value = 'Les cartes ont été enregistrées avec succès'
+  setTimeout(() => {
+    save.value = ''
+  }, 1000)
+}
+
+function resetCards() {
+  // On reset les cartes dans les différentes listes
+  cardsPasImportant.value = []
+  cardsPeuImportant.value = []
+  cardsMoinsImportant.value = []
+  cardsVeryImportant.value = []
+
+  // On delete les cartes dans le localStorage
+  nuxtStorage.localStorage.removeItem('cards')
+
+  // On récupère les données dans le localstorage pour les remettre dans les listes
+  const cardImportantStorage = JSON.parse(nuxtStorage.localStorage.getData('cardImportant'));
+  const cardNoImportantStorage = JSON.parse(nuxtStorage.localStorage.getData('cardNoImportant'));
+
+  // On récupère les informations du LocalStorage
+  if (cardImportantStorage) cardsImportant.value = [...cardImportantStorage]
+  if (cardNoImportantStorage)  cardsNoImportant.value = [...cardNoImportantStorage]
+}
 
 </script>
