@@ -1,0 +1,26 @@
+@import 'cards.scss';
+
+/* Ici le css perso */
+* {
+    box-sizing: border-box;
+}
+
+.btn-umanao {
+    background-color: #69549E;
+    color: white;
+}
+
+.btn-umanao:hover {
+    background-color: #502ba6;
+    color: white;
+}
+
+.btn-umanao-cancel {
+    background-color: #8872cc;
+    color: white;
+}
+
+.btn-umanao-cancel:hover {
+    background-color: #502ba6;
+    color: white;
+}

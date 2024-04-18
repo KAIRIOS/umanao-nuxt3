@@ -3,16 +3,16 @@
     <div class="row">
       <div class="col-md-2 vstack gap-2">
         <div class="hstack gap-2">
-          <NuxtLink to="/cards" class="btn btn-primary color-black">Etape 1</NuxtLink>
-          <NuxtLink to="/repartition" class="btn btn-primary color-black">Etape 2</NuxtLink>
+          <NuxtLink to="/cards" class="btn btn-umanao color-black">Etape 1</NuxtLink>
+          <NuxtLink to="/repartition" class="btn btn-umanao color-black">Etape 2</NuxtLink>
         </div>
         <h3 class="m-0">Consignes</h3>
         <div class="vstack gap-2">
           <span>
             classez les cartes sur l’ensemble de la grille, en vous souvenant que la carte que vous trouvez la plus importante, doit être placée en haut à droite de la grille, celle un peu moins importante juste en dessous, et ainsi de suite. (Consigne sera réécrite, ndlr)
           </span>
-          <!-- ACCORDION -->
-          <div class="card" style="height: 650px">
+
+          <div class="card card-all-important">
             <div class="card-body overflow-auto">
               <div class="accordion">
                 <div class="accordion-item">
@@ -151,7 +151,7 @@
       </div>
       <div class="col-md-10">
         <div class="card">
-          <div class="card-body" style="height: 887px !important">
+          <div class="card-body card-matrice">
             <VueFlow
               v-model="elements"
               :default-viewport="{ zoom: 1 }"

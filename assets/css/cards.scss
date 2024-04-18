@@ -1,0 +1,58 @@
+/* card de l'etape 1 */
+.card-less-important,
+.card-tri,
+.card-more-important {
+  height: 800px !important;
+}
+
+/* card de l'etape 2 */
+.card-no-important,
+.card-little-important,
+.card-can-important,
+.card-very-important {
+  height: 500px !important;
+}
+
+.card-important,
+.card-not-important {
+  height: 300px !important;
+}
+
+/* Grille */
+.card-all-important {
+  height: 650px !important;
+}
+
+.card-matrice {
+  height: 887px !important;
+}
+
+/* Quand la taille de l'ecran est inferieur a 1540px */
+@media screen and (max-width: 1540px) {
+  /* card de l'etape 1 */
+  .card-less-important,
+  .card-tri,
+  .card-more-important {
+    height: 550px !important;
+  }
+
+  /* card de l'etape 2 */
+  .card-no-important,
+  .card-little-important,
+  .card-can-important,
+  .card-very-important {
+    height: 300px !important;
+  }
+  .card-important,
+  .card-not-important {
+    height: 200px !important;
+  }
+
+  /* Grille */
+  .card-all-important {
+    height: 300px !important;
+  }
+  .card-matrice {
+    height: 610px !important;
+  }
+}

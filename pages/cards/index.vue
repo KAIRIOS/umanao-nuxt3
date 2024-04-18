@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-md-3 vstack gap-3">
         <div class="hstack gap-2">
-          <NuxtLink to="/repartition" class="btn btn-primary color-black">Etape 2</NuxtLink>
-          <NuxtLink to="/grilles" class="btn btn-primary color-black">Etape 3</NuxtLink>
+          <NuxtLink to="/repartition" class="btn btn-umanao color-black">Etape 2</NuxtLink>
+          <NuxtLink to="/grilles" class="btn btn-umanao color-black">Etape 3</NuxtLink>
         </div>
 
         <h3 class="m-0">Consignes</h3>
@@ -13,8 +13,8 @@
         </span>
         <div class="vstack gap-2">
           <div class="hstack gap-2">
-            <button class="btn btn-primary" @click="registerCard">Enregistrer</button>
-            <button class="btn btn-danger" @click="resetCards">Recommencer</button>
+            <button class="btn btn-umanao" @click="registerCard">Enregistrer</button>
+            <button class="btn btn-umanao-cancel" @click="resetCards">Recommencer</button>
           </div>
           <div v-if="error.length > 0" class="col-md-9 alert alert-danger w-100">
             {{ error }}
@@ -27,7 +27,7 @@
       <div class="col-md-3">
         <div class="card">
           <h4 class="card-header">Moins important</h4>
-          <div class="card-body overflow-auto" style="max-height: 800px !important">
+          <div class="card-body overflow-auto card-less-important">
             <draggable
               v-model="cardNoImportant"
               tag="div"
@@ -55,7 +55,7 @@
       <div class="col-md-3">
         <div class="card">
           <h4 class="card-header">Cartes à trier</h4>
-          <div class="card-body overflow-auto" style="max-height: 800px !important">
+          <div class="card-body overflow-auto card-tri">
             <draggable
               v-model="cardsSources"
               tag="div"
@@ -83,7 +83,7 @@
       <div class="col-md-3">
         <div class="card">
           <h4 class="card-header">Plus important</h4>
-          <div class="card-body overflow-auto" style="max-height: 800px !important">
+          <div class="card-body overflow-auto card-more-important" >
             <draggable
               :list="cardImportant"
               tag="div"

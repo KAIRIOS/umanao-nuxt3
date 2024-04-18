@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-md-2 vstack gap-3">
         <div class="hstack gap-2">
-          <NuxtLink to="/cards" class="btn btn-primary color-black">Etape 1</NuxtLink>
-          <NuxtLink to="/grilles" class="btn btn-primary color-black">Etape 3</NuxtLink>
+          <NuxtLink to="/cards" class="btn btn-umanao color-black">Etape 1</NuxtLink>
+          <NuxtLink to="/grilles" class="btn btn-umanao color-black">Etape 3</NuxtLink>
         </div>
 
         <h3 class="m-0">Consignes</h3>
@@ -13,8 +13,8 @@
         <span>1: Le tas de cartes « plutôt plus important » en 2 sous tas « + » et «++»  </span>
         <div class="vstack gap-2">
           <div class="hstack gap-2">
-            <button class="btn btn-primary" @click="registerCard">Enregistrer</button>
-            <button class="btn btn-danger" @click="resetCards">Recommencer</button>
+            <button class="btn btn-umanao" @click="registerCard">Enregistrer</button>
+            <button class="btn btn-umanao-cancel" @click="resetCards">Recommencer</button>
           </div>
           <div v-if="save.length > 0" class="col-md-9 alert alert-success w-100">
             {{ save }}
@@ -25,8 +25,8 @@
         <div class="row">
           <div class="col-md-3">
             <div class="card">
-              <h4 class="card-header">Pas important du tout</h4>
-              <div class="card-body overflow-auto" style="height: 500px !important">
+              <h4 class="card-header">Pas important</h4>
+              <div class="card-body overflow-auto card-no-important">
                 <draggable
                   v-model="cardsPasImportant"
                   tag="div"
@@ -54,7 +54,7 @@
           <div class="col-md-3">
             <div class="card">
               <h4 class="card-header">Peu important</h4>
-              <div class="card-body overflow-auto" style="height: 500px !important">
+              <div class="card-body overflow-auto card-little-important">
                 <draggable
                   v-model="cardsMoinsImportant"
                   tag="div"
@@ -81,8 +81,8 @@
           </div>
           <div class="col-md-3">
             <div class="card">
-              <h4 class="card-header">Moins important</h4>
-              <div class="card-body overflow-auto" style="height: 500px !important">
+              <h4 class="card-header">Plutôt important</h4>
+              <div class="card-body overflow-auto card-can-important">
                 <draggable
                   v-model="cardsPeuImportant"
                   tag="div"
@@ -109,8 +109,8 @@
           </div>
           <div class="col-md-3">
             <div class="card">
-              <h4 class="card-header">Important</h4>
-              <div class="card-body overflow-auto" style="height: 500px !important;">
+              <h4 class="card-header">Très important</h4>
+              <div class="card-body overflow-auto card-very-important">
                 <draggable
                   v-model="cardsVeryImportant"
                   tag="div"
@@ -140,7 +140,7 @@
           <div class="col-md-6">
             <div class="card">
               <h4 class="card-header">Pas important</h4>
-              <div class="card-body overflow-auto" style="height: 300px !important">
+              <div class="card-body overflow-auto card-not-important">
                 <draggable
                   v-model="cardsNoImportant"
                   tag="div"
@@ -168,7 +168,7 @@
           <div class="col-md-6">
             <div class="card">
               <h4 class="card-header">Important</h4>
-              <div class="card-body overflow-auto" style="height: 300px !important">
+              <div class="card-body overflow-auto card-important">
                 <draggable
                   v-model="cardsImportant"
                   tag="div"

@@ -1,7 +1,10 @@
 <template>
   <div class="container-fluid hstack align-items-center my-4">
-    <button class="btn btn-primary position-absolute" @click="goHome">Accueil</button>
-    <h1 class="flex-grow-1 text-center me-5">Projet UMANAO</h1>
+    <button class="btn btn-umanao position-absolute" @click="goHome">Accueil</button>
+    <NuxtLink to="/" class="imageCenter">
+      <img src="~/assets/images/logo-umanao.png" alt="logo Umanao" width="180px" >
+    </NuxtLink>
+
   </div>
 </template>
 
@@ -14,3 +17,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.imageCenter {
+  display: flex;
+  margin: 0 auto;
+}
+</style>
