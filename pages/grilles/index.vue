@@ -166,7 +166,7 @@
             >
               <!-- bind your custom node type to a component by using slots, slot names are always `node-<type>` -->
               <template #node-special="specialNodeProps">
-                <CustomNode v-bind="specialNodeProps" @delete="deleteCard"/>
+                <CustomNode v-bind="specialNodeProps" @delete="deleteCard" @click="handleNodeClick($event)"/>
               </template>
               <Controls>
                 <ControlButton>
@@ -197,6 +197,10 @@ const cardsPasImportant = ref([]);
 const cardsPeuImportant = ref([]);
 const cardsMoinsImportant = ref([]);
 const cardsVeryImportant = ref([]);
+
+function handleNodeClick(elementId) {
+  console.log('handleNodeClick', elementId)
+}
 
 function deleteCard(cardFromGrill) {
   const card = [...cardFromGrill][0]

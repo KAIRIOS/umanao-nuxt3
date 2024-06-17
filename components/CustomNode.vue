@@ -35,7 +35,7 @@ function handleDelete() {
             v-show="{ index }"
           >
             <div class="card-body border textClass" style="height: 186px;">
-              <div class="card-text">
+              <div class="card-text" @on-click="$emit('click', element.id)">
                 {{ element.texte }}
               </div>
             </div>

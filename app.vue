@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+const maintenance = ref(process.env.MAINTENANCE)
+definePageMeta({
+  middleware: 'auth'
+})
+</script>
+
+
 <template>
   <div v-if="maintenance" class="hstack justify-content-center" style="height: 100dvh">
     <h1>Site en maintenance</h1>
@@ -7,16 +15,3 @@
     <NuxtPage />
   </div>
 </template>
-
-<script lang="ts">
-import TheHeader from '~/components/TheHeader.vue'
-
-export default {
-  components: { TheHeader },
-  data() {
-    return {
-      maintenance: false
-    }
-  },
-}
-</script>

@@ -8,3 +8,8 @@ services:
     volumes:
       - .:/app
     tty: true
+    networks:
+      - backend
+networks:
+  backend:
+    external: true # Use the pre-defined network `backend` : docker network create backend

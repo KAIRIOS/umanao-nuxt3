@@ -1,3 +1,26 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import nuxtStorage from 'nuxt-storage/nuxt-storage'
+
+const token = useCookie('token')
+if (!token.value) {
+  navigateTo('/login')
+}
+
+
+const participantName = ref("");
+const startSession = function () {
+  nuxtStorage.localStorage.setData("player", participantName.value);
+  navigateTo("/cards");
+}
+
+const resetSession = function () {
+  nuxtStorage.localStorage.clear();
+  alert("La session est re-initialisé");
+}
+
+</script>
+
 <template>
   <div class="container-fluid">
     <div class="vstack gap-5">
@@ -26,19 +49,3 @@
 
   </div>
 </template>
-<script setup lang="ts">
-import { ref } from 'vue';
-import nuxtStorage from 'nuxt-storage/nuxt-storage'
-
-const participantName = ref("");
-const startSession = function () {
-  nuxtStorage.localStorage.setData("player", participantName.value);
-  this.$router.push("/cards");
-}
-
-const resetSession = function () {
-  nuxtStorage.localStorage.clear();
-  alert("La session est re-initialisé");
-}
-
-</script>
