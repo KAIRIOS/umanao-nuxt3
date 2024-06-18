@@ -1,8 +1,5 @@
 <script lang="ts" setup>
 const maintenance = ref(process.env.MAINTENANCE)
-definePageMeta({
-  middleware: 'auth'
-})
 </script>
 
 
