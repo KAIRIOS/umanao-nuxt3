@@ -27,7 +27,7 @@ async function testApiDistant() {
 
 async function logout() {
   logUserOut()
-  await navigateTo("/login")
+  await navigateTo('/auth/login')
 }
 
 function goHome() {
@@ -43,7 +43,7 @@ function goHome() {
       <button class="btn btn-umanao" @click="testApiDistant">Test API Distant</button>
     </div>
     <div class="hstack gap-2 position-absolute pe-3" style="right: 0">
-      <NuxtLink v-if="!token" to="/login" class="btn btn-umanao">Se connecter</NuxtLink>
+      <NuxtLink v-if="!token" to="/auth/login" class="btn btn-umanao">Se connecter</NuxtLink>
       <button v-if="token" class="btn btn-danger" @click="logout">Se déconnecter</button>
     </div>
     <NuxtLink to="/" class="imageCenter">
