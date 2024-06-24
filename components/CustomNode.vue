@@ -1,8 +1,9 @@
 <script setup>
 import draggable from "vuedraggable";
 
-const emit = defineEmits(['delete'])
+const emit = defineEmits(['delete', 'click'])
 const props = defineProps(['data'])
+const parentOfDrag = ref(null)
 
 function cutText(value, strLength = 30) {
   if (typeof value !== 'string') return ''
@@ -11,38 +12,40 @@ function cutText(value, strLength = 30) {
   return value.substring(0, strLength) + (value.length > strLength ? '...' : '')
 }
 
-function handleDelete() {
-  emit('delete', props.data.card)
-  props.data.card = []
+function handleClick() {
+  // On stop le click d'event pour ne pas déclencher le click de draggable
+  emit('click', {
+    parent: parentOfDrag.value,
+  })
 }
 
 </script>
 
 <template>
-  <div class="custom-node-container vstack justify-content-between gap-2">
-      <draggable
-        v-model="props.data.card"
-        tag="div"
-        itemKey="id"
-        group="cardElement"
-        class="vstack gap-3"
-        :disabled="props.data.card.length === 1"
-      >
-        <template #item="{ element, index }">
-          <div
-            v-bind:id="element.id"
-            :class="{ card: 'card' }"
-            v-show="{ index }"
-          >
-            <div class="card-body border textClass" style="height: 186px;">
-              <div class="card-text" @on-click="$emit('click', element.id)">
-                {{ element.texte }}
-              </div>
+  <div ref="parentOfDrag" class="custom-node-container vstack justify-content-between gap-2">
+    <draggable
+      v-model="props.data.card"
+      tag="div"
+      itemKey="id"
+      group="cardElement"
+      class="vstack gap-3"
+      @click.stop="handleClick"
+    >
+      <template #item="{ element, index }">
+        <div
+          :ref="`card-${element.id}`"
+          v-bind:id="element.id"
+          :class="{ card: 'card' }"
+          v-show="{ index }"
+        >
+          <div class="card-body border textClass" style="height: 235px;">
+            <div class="card-text">
+              {{ element.texte }}
             </div>
           </div>
-        </template>
-      </draggable>
-      <button v-if="props.data.card.length" @click="handleDelete" class="btn btn-outline-secondary">Repositionner</button>
+        </div>
+      </template>
+    </draggable>
   </div>
 </template>
 

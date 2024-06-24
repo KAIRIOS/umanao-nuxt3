@@ -1,10 +1,14 @@
 <script setup lang="ts">
+definePageMeta({
+  name: 'theHeader',
+  middleware: 'auth'
+})
+
 import { useFetch } from 'nuxt/app'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 
 const { logUserOut } = useAuthStore()
-const token = useCookie('token');
 const router = useRouter()
 
 async function testApi() {
@@ -26,7 +30,7 @@ async function testApiDistant() {
 }
 
 async function logout() {
-  logUserOut()
+  await logUserOut()
   await navigateTo('/auth/login')
 }
 
@@ -36,7 +40,7 @@ function goHome() {
 </script>
 
 <template>
-  <div class="container-fluid hstack align-items-center my-4">
+  <div class="container-fluid hstack align-items-center my-3">
     <div class="hstack gap-2 position-absolute">
       <button class="btn btn-umanao" @click="goHome">Accueil</button>
       <button class="btn btn-umanao" @click="testApi">Test API Local</button>
@@ -49,7 +53,6 @@ function goHome() {
     <NuxtLink to="/" class="imageCenter">
       <img src="~/assets/images/logo-umanao.png" alt="logo Umanao" width="180px" >
     </NuxtLink>
-
   </div>
 </template>
 

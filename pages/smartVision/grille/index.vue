@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-md-2 vstack gap-2">
         <div class="hstack gap-2">
-          <NuxtLink to="/cards" class="btn btn-umanao color-black">Etape 1</NuxtLink>
-          <NuxtLink to="/repartition" class="btn btn-umanao color-black">Etape 2</NuxtLink>
+          <NuxtLink to="/smartVision/card" class="btn btn-umanao color-black">Etape 1</NuxtLink>
+          <NuxtLink to="/smartVision/card/repartition" class="btn btn-umanao color-black">Etape 2</NuxtLink>
         </div>
         <h3 class="m-0">Consignes</h3>
         <div class="vstack gap-2">
@@ -37,9 +37,9 @@
                             v-show="{ index }"
                           >
                             <div class="card-body" style="cursor: grab">
-                        <span class="card-text">
-                          {{ element.texte }}
-                        </span>
+                              <span class="card-text">
+                                {{ element.texte }}
+                              </span>
                             </div>
                           </div>
                         </template>
@@ -133,9 +133,9 @@
                             v-show="{ index }"
                           >
                             <div class="card-body" style="cursor: grab">
-                        <span class="card-text">
-                          {{ element.texte }}
-                        </span>
+                              <span class="card-text">
+                                {{ element.texte }}
+                              </span>
                             </div>
                           </div>
                         </template>
@@ -152,7 +152,15 @@
       <div class="col-md-10">
         <div class="card">
           <div class="card-body card-matrice">
+            <div v-if="cloneCard" class="card opacity-50 position-absolute" style="width: 235px; height: 235px;">
+              <div class="card-body border textClass">
+                <div class="card-text">
+                  {{ cloneCard[0].texte }}
+                </div>
+              </div>
+            </div>
             <VueFlow
+              ref="flow"
               v-model="elements"
               :default-viewport="{ zoom: 1 }"
               :max-zoom="0.85"
@@ -181,6 +189,11 @@
   </div>
 </template>
 <script setup lang="ts">
+definePageMeta({
+  name: 'grille',
+  middleware: 'auth'
+})
+
 import { VueFlow } from '@vue-flow/core'
 import { Controls, ControlButton } from '@vue-flow/controls'
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
@@ -188,7 +201,6 @@ import draggable from "vuedraggable";
 import CustomNode from '~/components/CustomNode.vue'
 import nodesTools from '~/tools/nodes.js'
 import { ref } from 'vue'
-
 
 const elements = ref(nodesTools.generate(10, 10, 1))
 const idLastReposition = ref(null);
@@ -198,15 +210,41 @@ const cardsPeuImportant = ref([]);
 const cardsMoinsImportant = ref([]);
 const cardsVeryImportant = ref([]);
 
-function handleNodeClick(elementId) {
-  console.log('handleNodeClick', elementId)
+let cloneCard = ref(null)
+const flow = ref(null)
+
+function handleNodeClick({ parent }) {
+  // On récupère tous les nodes de la grille
+  const allNodes = flow.value?.nodes
+  if (!allNodes) return
+  // On récupère l'id du node parent
+  const idNode = parent.attributes.id.value
+  if (!idNode) return
+  // On récupère les données du node cliqué
+  const nodeSelected = allNodes.find((node) => node.id === idNode)
+  const dataCardNodeSelected = nodeSelected.data.card
+
+  if (!cloneCard.value && !dataCardNodeSelected.length) return
+  if (cloneCard.value && dataCardNodeSelected.length) return
+
+  if (!cloneCard.value && dataCardNodeSelected.length) {
+    cloneCard.value = dataCardNodeSelected
+    nodeSelected.data.card = []
+    return
+  }
+
+  if (cloneCard.value && !dataCardNodeSelected.length) {
+    nodeSelected.data.card.push(cloneCard.value[0])
+    cloneCard.value = null
+    return
+  }
 }
 
 function deleteCard(cardFromGrill) {
   const card = [...cardFromGrill][0]
   idLastReposition.value = card.id
 
-  // On recupère les cartes présente dans le localStorage
+  // On récupère les cartes présente dans le localStorage
   const cards = JSON.parse(nuxtStorage.localStorage.getData('cards'));
 
   const cardsPasImportantLocal = cards.cardsPasImportant;
@@ -255,11 +293,17 @@ onMounted(() => {
 
 <style>
 /* import the necessary styles for Vue Flow to work */
-@import '@vue-flow/core/dist/style.css';
+@import '../../../node_modules/@vue-flow/core/dist/style.css';
 
 /* import the default theme, this is optional but generally recommended */
-@import '@vue-flow/core/dist/theme-default.css';
+@import '../../../node_modules/@vue-flow/core/dist/theme-default.css';
 
 /* Import des styles pour les controls */
-@import '@vue-flow/controls/dist/style.css';
+@import '../../../node_modules/@vue-flow/controls/dist/style.css';
+.textClass {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  overflow: hidden;
+}
 </style>

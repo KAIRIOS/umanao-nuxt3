@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-md-2 vstack gap-3">
         <div class="hstack gap-2">
-          <NuxtLink to="/cards" class="btn btn-umanao color-black">Etape 1</NuxtLink>
-          <NuxtLink to="/grilles" class="btn btn-umanao color-black">Etape 3</NuxtLink>
+          <NuxtLink to="/smartVision/card" class="btn btn-umanao color-black">Etape 1</NuxtLink>
+          <NuxtLink to="/smartVision/grille" class="btn btn-umanao color-black">Etape 3</NuxtLink>
         </div>
 
         <h3 class="m-0">Consignes</h3>
@@ -199,6 +199,11 @@
   </div>
 </template>
 <script setup lang="ts">
+definePageMeta({
+  name: 'repartition',
+  middleware: 'auth'
+})
+
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
 import draggable from "vuedraggable";
 import { ref } from 'vue'

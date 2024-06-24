@@ -1,21 +1,27 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '~/stores/auth'
-
-const { authenticateUser } = useAuthStore()
-const { authenticated } = storeToRefs(useAuthStore())
 
 const user = ref({
   email: 'mcavata@kairios.fr',
   password: '',
 });
 
-const router = useRouter()
-
 const login = async () => {
-  await authenticateUser(user.value)
-  if (authenticated.value) {
-    await router.push('/')
+  try {
+    const data: any = await $fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: user.value.email,
+        password: user.value.password
+      }),
+    });
+
+    const token = useCookie('token')
+    token.value = data.token
+    // Rediriger l'utilisateur vers la page d'accueil
+    navigateTo('/')
+  } catch (e) {
+    console.error(e)
   }
 };
 </script>

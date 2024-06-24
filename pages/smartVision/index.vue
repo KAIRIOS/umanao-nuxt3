@@ -1,11 +1,16 @@
 <script setup lang="ts">
+definePageMeta({
+  name: 'smartVision',
+  middleware: 'auth'
+})
+
 import { ref } from 'vue';
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
 
 const participantName = ref("");
 const startSession = function () {
   nuxtStorage.localStorage.setData("player", participantName.value);
-  navigateTo("/cards");
+  navigateTo("/smartVision/card");
 }
 
 const resetSession = function () {
@@ -35,7 +40,7 @@ const resetSession = function () {
         <div class="form-group ">
           <input v-model="participantName" class="form-control" id="participant" placeholder="Participant" />
         </div>
-        <NuxtLink to="/cards" @click="startSession" class="btn btn-umanao">Prêt à commencer</NuxtLink>
+        <button class="btn btn-umanao" @click="startSession">Prêt à commencer</button>
         <button class="btn btn-danger" @click="resetSession">Reset la session</button>
       </div>
     </div>
