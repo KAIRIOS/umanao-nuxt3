@@ -1,40 +1,35 @@
 <script setup lang="ts">
-definePageMeta({
-  name: 'theHeader',
-  middleware: 'auth'
-})
+import { useRouter } from '#app'
 
-import { useFetch } from 'nuxt/app'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '~/stores/auth'
+const { token } = storeToRefs(useUserStore())
+const { isGranted, setUser, setToken } = useUserStore()
 
-const { logUserOut } = useAuthStore()
-const router = useRouter()
-
-async function testApi() {
-  try {
-    const { data } = await useFetch('/api/health/ping')
-    console.log('Result ping :', data?.value)
-  } catch(e) {
-    console.log('Result ping error : ', e)
-  }
-}
-
-async function testApiDistant() {
-  try {
-    const { data } = await useFetch('apiDistant/health/ping')
-    console.log('Result ping distant :', data?.value)
-  } catch(e) {
-    console.log('Result ping distant error : ', e)
-  }
-}
+// async function testApi() {
+//   try {
+//     const { data } = await useFetch('/api/health/ping')
+//     console.log('Result ping :', data?.value)
+//   } catch(e) {
+//     console.log('Result ping error : ', e)
+//   }
+// }
+//
+// async function testApiDistant() {
+//   try {
+//     const { data } = await useFetch('apiDistant/health/ping')
+//     console.log('Result ping distant :', data?.value)
+//   } catch(e) {
+//     console.log('Result ping distant error : ', e)
+//   }
+// }
 
 async function logout() {
-  await logUserOut()
+  setUser()
+  setToken()
   await navigateTo('/auth/login')
 }
 
 function goHome() {
+  const router = useRouter()
   router.push("/");
 }
 </script>
@@ -43,11 +38,14 @@ function goHome() {
   <div class="container-fluid hstack align-items-center my-3">
     <div class="hstack gap-2 position-absolute">
       <button class="btn btn-umanao" @click="goHome">Accueil</button>
-      <button class="btn btn-umanao" @click="testApi">Test API Local</button>
-      <button class="btn btn-umanao" @click="testApiDistant">Test API Distant</button>
+<!--      <button class="btn btn-umanao" @click="testApi">Test API Local</button>-->
+<!--      <button class="btn btn-umanao" @click="testApiDistant">Test API Distant</button>-->
     </div>
     <div class="hstack gap-2 position-absolute pe-3" style="right: 0">
+      <NuxtLink to="/bac" class="btn btn-warning">Bac a sable</NuxtLink>
       <NuxtLink v-if="!token" to="/auth/login" class="btn btn-umanao">Se connecter</NuxtLink>
+      <NuxtLink v-if="token && isGranted('ROLE_ADMIN')" to="/administration" class="btn btn-umanao">Administration</NuxtLink>
+      <NuxtLink v-if="token" to="/profil" class="btn btn-umanao">Profil</NuxtLink>
       <button v-if="token" class="btn btn-danger" @click="logout">Se déconnecter</button>
     </div>
     <NuxtLink to="/" class="imageCenter">

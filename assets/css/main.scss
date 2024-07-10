@@ -1,8 +1,16 @@
 @import 'cards.scss';
+@import 'nav.scss';
+@import "table.scss";
+@import "toast.scss";
+@import "loading.scss";
 
 /* Ici le css perso */
 * {
     box-sizing: border-box;
+}
+
+.bg-umanao {
+ background-color: #69549E;
 }
 
 .btn-umanao {
@@ -23,4 +31,14 @@
 .btn-umanao-cancel:hover {
     background-color: #502ba6;
     color: white;
+}
+
+// Transition page
+.page-enter-active,
+.page-leave-active {
+    transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+    opacity: 0;
 }

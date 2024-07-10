@@ -4,7 +4,6 @@ definePageMeta({
   middleware: 'auth'
 })
 
-import { ref } from 'vue';
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
 
 const participantName = ref("");

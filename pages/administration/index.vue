@@ -1,0 +1,183 @@
+<script setup lang="ts">
+definePageMeta({
+  name: 'administration',
+  middleware: 'auth'
+})
+
+import { reactive } from "vue"
+import Modal from '~/components/Ui/Modal.vue'
+import Button from '~/components/Ui/Button.vue'
+
+
+
+const idSociety = ref(null)
+const idUser = ref(null)
+const adminSociety = ref(null)
+const adminUser = ref(null)
+const isDelete = ref(false)
+const message = ref(null)
+const { $notify, $api } = useNuxtApp()
+
+const showModal = reactive({
+  society: false,
+  user: false,
+  delete: false,
+})
+
+// Fonctions
+const initSociety = () => {
+  adminSociety.value.init()
+  idSociety.value = null
+}
+
+const initUser = () => {
+  adminUser.value.init()
+  idUser.value = null
+}
+
+const handleOpenModalSociety = () => {
+  idSociety.value = null
+  showModal.society = true
+}
+
+const handleOpenModalUser = () => {
+  idUser.value = null
+  showModal.user = true
+}
+
+const handleCloseModalDelete = (forDelete = false) => {
+  isDelete.value = forDelete
+  showModal.delete = false
+}
+
+const editSociety = (id) => {
+  if (id) {
+    idSociety.value = id
+    showModal.society = true
+  }
+}
+
+const editUser = (id) => {
+  if (id) {
+    idUser.value = id
+    showModal.user = true
+  }
+}
+
+const handleDeleteSociety = (id) => {
+  idSociety.value = id
+  showModal.delete = true
+  message.value = 'Vous êtes sûr de vouloir supprimer cette société ?'
+}
+
+const handleDeleteUser = (id) => {
+  idUser.value = id
+  showModal.delete = true
+  message.value = 'Vous êtes sûr de vouloir supprimer cet utilisateur ?'
+}
+
+const deleteSociety = async (idSociety) => {
+  try {
+    await $api(`society`, {
+      method: 'DELETE',
+      body: JSON.stringify({ id: idSociety }),
+    })
+    initSociety()
+  } catch (e) {
+    if (e?.response?.status === 409) {
+      $notify('error', 'Un ou plusieurs utilisateur(s) sont associés à cette société')
+    } else {
+      $notify('error', 'Erreur lors de la suppression de la société')
+    }
+  } finally {
+    initValue()
+  }
+}
+
+const deleteUser = async (idUser) => {
+  try {
+    await $api(`user`, {
+      method: 'DELETE',
+      body: JSON.stringify({ id: idUser })
+    })
+    initUser()
+  } catch (e) {
+    $notify('error', "Erreur lors de la suppression de l'utilisateur")
+  } finally {
+    initValue()
+  }
+}
+
+const initValue = () => {
+  idSociety.value = null
+  idUser.value = null
+  isDelete.value = false
+}
+// End Fonctions
+
+watch(() => isDelete.value, async (value) => {
+  if (!value) {
+    return
+  }
+
+  if (value && idSociety.value) await deleteSociety(idSociety.value)
+  if (value && idUser.value) await deleteUser(idUser.value)
+})
+
+</script>
+
+<template>
+  <div class="container-fluid">
+    <h5 class="text-center">Administration</h5>
+
+    <AdministrationNavbar
+      @open-modal-society="handleOpenModalSociety"
+      @open-modal-user="handleOpenModalUser"
+    />
+
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="societies-tab-pane" role="tabpanel" aria-labelledby="societies-tab" tabindex="0">
+        <AdministrationSocietes
+          ref="adminSociety"
+          @edit="editSociety($event)"
+          @delete="handleDeleteSociety($event)"
+        />
+      </div>
+      <div class="tab-pane fade" id="users-tab-pane" role="tabpanel" aria-labelledby="users-tab" tabindex="0">
+        <AdministrationUsers
+          ref="adminUser"
+          @edit="editUser($event)"
+          @delete="handleDeleteUser($event)"
+        />
+      </div>
+    </div>
+
+    <AdministrationModalAddSociety
+      :show="showModal.society"
+      :id-society="idSociety"
+      @close="showModal.society = false"
+      @created="initSociety"
+      @updated="initSociety"
+    />
+
+    <AdministrationModalAddUser
+      :show="showModal.user"
+      :id-user="idUser"
+      @close="showModal.user = false"
+      @created="initUser"
+      @updated="initUser"
+    />
+
+    <Modal :show="showModal.delete" :show-close="true" @close="handleCloseModalDelete">
+      <template #header>
+        <h5 class="modal-title">Confirmation de suppression</h5>
+      </template>
+      <div>
+        <p>{{ message }}</p>
+      </div>
+      <template #footer>
+        <Button class="btn-umanao" label="Valider" type="button" data-bs-dismiss="modal" @click="handleCloseModalDelete(true)" />
+      </template>
+    </Modal>
+  </div>
+</template>

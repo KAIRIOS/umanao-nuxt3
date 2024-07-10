@@ -189,6 +189,7 @@
   </div>
 </template>
 <script setup lang="ts">
+
 definePageMeta({
   name: 'grille',
   middleware: 'auth'

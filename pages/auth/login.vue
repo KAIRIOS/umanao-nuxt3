@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+const { setUser, setToken } = useUserStore()
 
 const user = ref({
   email: 'mcavata@kairios.fr',
@@ -16,11 +17,18 @@ const login = async () => {
       }),
     });
 
-    const token = useCookie('token')
-    token.value = data.token
+    // On set l'user dans le store
+    if (data) {
+
+      console.log('data :', data)
+      setToken(data.token)
+      setUser(data.user)
+    }
     // Rediriger l'utilisateur vers la page d'accueil
     navigateTo('/')
   } catch (e) {
+    setToken()
+    setUser()
     console.error(e)
   }
 };

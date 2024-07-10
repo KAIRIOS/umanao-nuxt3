@@ -1,5 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  app: {
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in'
+    },
+  },
   devtools: { enabled: true },
   ssr: false,
 
@@ -17,8 +23,14 @@ export default defineNuxtConfig({
 
   css: [
     "~/node_modules/bootstrap/dist/css/bootstrap.css",
-    "~/assets/css/main.scss"
+    "~/assets/css/main.scss",
   ],
 
   modules: ["@pinia/nuxt"],
+  pinia: {
+    autoImport: ['defineStore'],
+  },
+  import: {
+    dirs: ["./stores"],
+  },
 })
