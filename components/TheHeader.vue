@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { useRouter } from '#app'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
 import Button from '~/components/Ui/Button.vue'
 
 const { token } = storeToRefs(useUserStore())

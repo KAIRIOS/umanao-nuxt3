@@ -13,15 +13,13 @@ const isLoading = reactive({
   loading: false
 })
 
-const { roles, user, token } = storeToRefs(useUserStore())
-const { isGranted } = useUserStore()
+const { user } = storeToRefs(useUserStore())
+const { $api } = useNuxtApp()
 
 const init = async () => {
   try {
     isLoading.loading = true
-    const userRepo = repository()
-    const { data } = await useAsyncData(() => userRepo.getExercices())
-    exercices.value = data.value
+    exercices.value = await $api('exercice')
   } catch (e) {
     if (e?.response?.status === 403) {
       $notify('error', "Vous n'avez pas les droits pour accéder à cette page")
