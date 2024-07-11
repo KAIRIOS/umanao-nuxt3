@@ -45,12 +45,12 @@ function goHome() {
 <!--      <button class="btn btn-umanao" @click="testApiDistant">Test API Distant</button>-->
     </div>
     <div class="hstack gap-2 position-absolute pe-3" style="right: 0">
-      <Button
-        class="btn-warning"
-        label="Bac à sable"
-        link="/bac"
-        icon="fas fa-flask"
-      />
+<!--      <Button-->
+<!--        class="btn-warning"-->
+<!--        label="Bac à sable"-->
+<!--        link="/bac"-->
+<!--        icon="fas fa-flask"-->
+<!--      />-->
       <Button
         v-if="!token"
         class="btn-umanao"

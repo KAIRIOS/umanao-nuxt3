@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   name: 'BacASable',
+  middleware: 'auth',
 })
 
 import Button from '~/components/Ui/Button.vue'
