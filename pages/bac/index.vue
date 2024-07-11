@@ -13,7 +13,6 @@ const toast = ref(null)
 const { $notify } = useNuxtApp()
 const loading = ref(false)
 const modalTest = ref(null)
-const theModal = ref(null)
 
 const openModal = () => {
   showModal.value = true
@@ -43,16 +42,23 @@ const openNotify = () => {
 <template>
   <div class="container-fluid">
     <div class="vstack gap-2">
-      <div class="border border-secondary-subtle p-2" style="border-radius: 4px;">
+      <div class="border border-secondary-subtle p-2 rounded">
         <div class="hstack gap-2">
           <Button class="btn-info" label="Avec Label" />
           <Button class="btn-info">Sans Label</Button>
+          <Button class="btn-umanao" :icon="['fas', 'arrow-right-from-bracket']" label="Label + icon"/>
           <Button class="btn-info" label="Avec Label + Small" small />
           <Button class="btn-info" small>Sans Label + Small</Button>
+
+
+          <Button class="btn-umanao" small :icon="['fas', 'arrow-right-from-bracket']">Sans Label + Small + icon left</Button>
+          <Button class="btn-umanao" small :icon="['fas', 'arrow-right-from-bracket']" label="Label + icon"/>
+          <Button class="btn-umanao" small :icon="['fas', 'arrow-right-from-bracket']" label="Label + icon Right" icon-right />
+          <Button class="btn-umanao" small :icon="['fas', 'arrow-right-from-bracket']" />
         </div>
       </div>
 
-      <div class="border border-secondary-subtle p-2" style="border-radius: 4px;">
+      <div class="border border-secondary-subtle p-2 rounded">
         <div class="hstack gap-2">
           <div>
             <Button class="btn-info" label="Open Modal" @click="openModal" />
@@ -69,7 +75,7 @@ const openNotify = () => {
         </div>
       </div>
 
-      <div class="border border-danger border-opacity-50 p-2" style="border-radius: 4px;">
+      <div class="border border-danger border-opacity-50 p-2 rounded">
         <div class="hstack gap-2">
           <Button class="btn-umanao" label="Test Notify" @click="openNotify" />
         </div>
@@ -79,7 +85,7 @@ const openNotify = () => {
         <Button class="btn-outline-primary" label="Test Loading True" @click="loading = true" />
         <Button class="btn-outline-danger" label="Test Loading False" @click="loading = false" />
       </div>
-      <div class="border border-info p-2 position-relative" style="border-radius: 4px; height: 100px">
+      <div class="border border-info p-2 position-relative rounded" style="height: 100px">
         <Loading v-if="loading" />
       </div>
     </div>

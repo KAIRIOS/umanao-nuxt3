@@ -66,8 +66,8 @@ defineExpose({
         <td>{{ society?.city }}</td>
         <td style="width: 100px">
           <div class="hstack gap-2">
-            <Button class="btn-umanao" label="Modifier"  :small="true" @click="emit('edit', society.id)" />
-            <Button class="btn-danger" label="Supprimer" :small="true" @click="emit('delete', society.id)" />
+            <Button class="btn-umanao" small icon="fas fa-edit" @click="emit('edit', society.id)" />
+            <Button class="btn-danger" small icon="fas fa-trash" @click="emit('delete', society.id)" />
           </div>
         </td>
       </tr>

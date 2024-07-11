@@ -63,8 +63,8 @@ defineExpose({
         <td>{{ user?.roles ? USER_ROLES[user?.roles] : ''}}</td>
         <td style="width: 100px">
           <div class="hstack gap-2">
-            <Button class="btn-umanao" label="Modifier" :small="true" @click="emit('edit', user.id)" />
-            <Button class="btn-danger" label="Supprimer" :small="true" @click="emit('delete', user.id)" />
+            <Button class="btn-umanao" small icon="fas fa-edit" @click="emit('edit', user.id)" />
+            <Button class="btn-danger" small icon="fas fa-trash" @click="emit('delete', user.id)" />
           </div>
         </td>
       </tr>

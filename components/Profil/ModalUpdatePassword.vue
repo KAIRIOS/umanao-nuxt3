@@ -81,10 +81,10 @@ const updatePassword = async () => {
     </template>
 
     <div class="vstack gap-3">
-      <div v-if="message" class="bg-danger-subtle p-3" style="border-radius: 4px;">
+      <div v-if="message" class="bg-danger-subtle p-3 rounded">
         {{ message }}
       </div>
-      <div v-if="updateOk" class="bg-info-subtle p-3" style="border-radius: 4px;">
+      <div v-if="updateOk" class="bg-info-subtle p-3 rounded">
         Votre mot de passe a été modifié avec succès. Vous allez être déconnecté.
       </div>
 

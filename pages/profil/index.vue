@@ -66,7 +66,7 @@ onMounted(() => {
       <h5 class="text-center mb-3">Mon profil</h5>
 
       <div class="m-auto" style="width: 550px">
-        <div class="border p-4" style="border-radius: 4px">
+        <div class="border p-4 rounded">
           <div class="vstack gap-2">
             <div class="row g-3">
               <div class="col-6 title">

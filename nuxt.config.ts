@@ -26,6 +26,10 @@ export default defineNuxtConfig({
     "~/assets/css/main.scss",
   ],
 
+  plugins: [
+    { src: '~/plugins/font-awesome.ts' },
+  ],
+
   modules: ["@pinia/nuxt"],
   pinia: {
     autoImport: ['defineStore'],

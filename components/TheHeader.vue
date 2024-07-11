@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from '#app'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+import Button from '~/components/Ui/Button.vue'
 
 const { token } = storeToRefs(useUserStore())
 const { isGranted, setUser, setToken } = useUserStore()
@@ -37,16 +40,45 @@ function goHome() {
 <template>
   <div class="container-fluid hstack align-items-center my-3">
     <div class="hstack gap-2 position-absolute">
-      <button class="btn btn-umanao" @click="goHome">Accueil</button>
+      <Button class="btn-umanao" label="Accueil" @click="goHome" />
 <!--      <button class="btn btn-umanao" @click="testApi">Test API Local</button>-->
 <!--      <button class="btn btn-umanao" @click="testApiDistant">Test API Distant</button>-->
     </div>
     <div class="hstack gap-2 position-absolute pe-3" style="right: 0">
-      <NuxtLink to="/bac" class="btn btn-warning">Bac a sable</NuxtLink>
-      <NuxtLink v-if="!token" to="/auth/login" class="btn btn-umanao">Se connecter</NuxtLink>
-      <NuxtLink v-if="token && isGranted('ROLE_ADMIN')" to="/administration" class="btn btn-umanao">Administration</NuxtLink>
-      <NuxtLink v-if="token" to="/profil" class="btn btn-umanao">Profil</NuxtLink>
-      <button v-if="token" class="btn btn-danger" @click="logout">Se déconnecter</button>
+      <Button
+        class="btn-warning"
+        label="Bac à sable"
+        link="/bac"
+        icon="fas fa-flask"
+      />
+      <Button
+        v-if="!token"
+        class="btn-umanao"
+        label="Se connecter"
+        link="/auth/login"
+        icon="fas fa-sign-in-alt"
+      />
+      <Button
+        v-if="token && isGranted('ROLE_ADMIN')"
+        class="btn-umanao"
+        label="Administration"
+        link="/administration"
+        icon="fas fa-cog"
+      />
+      <Button
+        v-if="token"
+        class="btn-umanao"
+        label="Profil" link="/profil"
+        icon="fas fa-user"
+      />
+      <Button
+        v-if="token"
+        class="btn-danger"
+        label="Se déconnecter"
+        link="/bac"
+        icon="fas fa-sign-out-alt"
+        @click="logout"
+      />
     </div>
     <NuxtLink to="/" class="imageCenter">
       <img src="~/assets/images/logo-umanao.png" alt="logo Umanao" width="180px" >
