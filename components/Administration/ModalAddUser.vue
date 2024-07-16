@@ -20,7 +20,7 @@ const MODEL_USER = {
 const form = ref({})
 const societies = ref([])
 const emit = defineEmits(['close', 'created', 'updated'])
-const { $api } = useNuxtApp()
+const { $api, $notify } = useNuxtApp()
 
 const AddOrEditSociety = async () => {
   try {
@@ -44,7 +44,8 @@ const AddOrEditSociety = async () => {
     }
     emit('close')
   } catch (e) {
-    console.log('error', "Erreur lors de la création de l'utilisateur", e)
+    if (props.idUser) $notify('error', "Erreur lors de la modification de l'utilisateur", e)
+    else $notify('error', "Erreur lors de la création de l'utilisateur", e)
   }
 }
 
@@ -103,6 +104,7 @@ watch(() => props.show, (value) => {
           <div class="form-check form-switch">
             <div class="form-check form-switch ps-0">
               <input
+                v-model="form.active"
                 class="form-check-input"
                 type="checkbox"
                 role="switch"

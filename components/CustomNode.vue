@@ -1,7 +1,7 @@
 <script setup>
 import draggable from "vuedraggable";
 
-const emit = defineEmits(['delete', 'click'])
+const emit = defineEmits(['click'])
 const props = defineProps(['data'])
 const parentOfDrag = ref(null)
 

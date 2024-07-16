@@ -8,8 +8,6 @@ import { reactive } from "vue"
 import Modal from '~/components/Ui/Modal.vue'
 import Button from '~/components/Ui/Button.vue'
 
-
-
 const idSociety = ref(null)
 const idUser = ref(null)
 const adminSociety = ref(null)
@@ -83,9 +81,10 @@ const deleteSociety = async (idSociety) => {
       body: JSON.stringify({ id: idSociety }),
     })
     initSociety()
+    initUser()
   } catch (e) {
-    if (e?.response?.status === 409) {
-      $notify('error', 'Un ou plusieurs utilisateur(s) sont associés à cette société')
+    if (e.response?._data?.error_description) {
+      $notify('error', e.response._data.error_description[0])
     } else {
       $notify('error', 'Erreur lors de la suppression de la société')
     }
@@ -102,7 +101,11 @@ const deleteUser = async (idUser) => {
     })
     initUser()
   } catch (e) {
-    $notify('error', "Erreur lors de la suppression de l'utilisateur")
+    if (e.response?._data?.error_description) {
+      $notify('error', e.response._data.error_description[0])
+    } else {
+      $notify('error', "Erreur lors de la suppression de l'utilisateur")
+    }
   } finally {
     initValue()
   }

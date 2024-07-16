@@ -16,9 +16,9 @@ const init = async () => {
     isLoading.loading = true
     users.value = await $api('user')
   } catch (e) {
-    if (e?.response?.status === 403) {
-      $notify('error', "Vous n'avez pas les droits pour accéder à cette page")
-      navigateTo('/')
+    if (e.response?._data?.error_description) {
+      $notify('error', e.response._data.error_description)
+      if (e?.response?.status === 403) navigateTo('/')
     } else {
       $notify('error', 'Erreur lors de la récupération des utilisateurs')
     }
@@ -46,13 +46,14 @@ defineExpose({
         <th>Nom</th>
         <th>Prénom</th>
         <th>Actif</th>
+        <th>Société</th>
         <th>Roles</th>
         <th>Actions</th>
       </tr>
       </thead>
       <tbody>
       <tr v-if="users.length === 0">
-        <td  colspan="4" class="text-center">
+        <td  colspan="6" class="text-center">
           <span>Aucun résultat</span>
         </td>
       </tr>
@@ -60,6 +61,7 @@ defineExpose({
         <td>{{ user?.name }}</td>
         <td>{{ user?.firstname }}</td>
         <td>{{ user?.active ? 'Actif' : 'Non Actif' }}</td>
+        <td>{{ user?.societyName }}</td>
         <td>{{ user?.roles ? USER_ROLES[user?.roles] : ''}}</td>
         <td style="width: 100px">
           <div class="hstack gap-2">

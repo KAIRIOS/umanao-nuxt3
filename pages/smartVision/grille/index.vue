@@ -225,20 +225,23 @@ function handleNodeClick({ parent }) {
   const nodeSelected = allNodes.find((node) => node.id === idNode)
   const dataCardNodeSelected = nodeSelected.data.card
 
-  if (!cloneCard.value && !dataCardNodeSelected.length) return
-  if (cloneCard.value && dataCardNodeSelected.length) return
+  deleteCard(dataCardNodeSelected)
+  nodeSelected.data.card = []
 
-  if (!cloneCard.value && dataCardNodeSelected.length) {
-    cloneCard.value = dataCardNodeSelected
-    nodeSelected.data.card = []
-    return
-  }
-
-  if (cloneCard.value && !dataCardNodeSelected.length) {
-    nodeSelected.data.card.push(cloneCard.value[0])
-    cloneCard.value = null
-    return
-  }
+  // if (!cloneCard.value && !dataCardNodeSelected.length) return
+  // if (cloneCard.value && dataCardNodeSelected.length) return
+  //
+  // if (!cloneCard.value && dataCardNodeSelected.length) {
+  //   cloneCard.value = dataCardNodeSelected
+  //   nodeSelected.data.card = []
+  //   return
+  // }
+  //
+  // if (cloneCard.value && !dataCardNodeSelected.length) {
+  //   nodeSelected.data.card.push(cloneCard.value[0])
+  //   cloneCard.value = null
+  //   return
+  // }
 }
 
 function deleteCard(cardFromGrill) {
@@ -255,25 +258,21 @@ function deleteCard(cardFromGrill) {
 
   // On cherche dans quel tableau se trouve la carte
   const indexPasImportant = cardsPasImportantLocal.findIndex((element) => element.id === card.id)
-  console.log('indexPasImportant', indexPasImportant)
   if (indexPasImportant !== -1) {
     cardsPasImportant.value.unshift(card)
     return
   }
   const indexPeuImportant = cardsPeuImportantLocal.findIndex((element) => element.id === card.id)
-  console.log('indexPeuImportant', indexPeuImportant)
   if (indexPeuImportant !== -1) {
     cardsPeuImportant.value.unshift(card)
     return
   }
   const indexMoinsImportant = cardsMoinsImportantLocal.findIndex((element) => element.id === card.id)
-  console.log('indexMoinsImportant', indexMoinsImportant)
   if (indexMoinsImportant !== -1) {
     cardsMoinsImportant.value.unshift(card)
     return
   }
   const indexVeryImportant = cardsVeryImportantLocal.findIndex((element) => element.id === card.id)
-  console.log('indexVeryImportant', indexVeryImportant)
   if (indexVeryImportant !== -1) {
     cardsVeryImportant.value.unshift(card)
     return
