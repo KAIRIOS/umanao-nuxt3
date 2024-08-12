@@ -3,18 +3,23 @@ definePageMeta({
   name: 'home',
   middleware: 'auth'
 })
-import { useUserStore } from '~/stores/user'
-import { repository } from '~/tools/repository'
 import Loading from '~/components/Ui/Loading.vue'
+
+const { $api } = useNuxtApp()
+const token = useCookie('token');
+const { user } = storeToRefs(useUserStore())
+const { setUser } = useUserStore()
+
+if (token.value && !user.value?.id) {
+  const { userConnected } = await $api('/user/connected')
+  setUser(userConnected)
+}
 
 const { $notify } = useNuxtApp()
 const exercices = ref([])
 const isLoading = reactive({
   loading: false
 })
-
-const { user } = storeToRefs(useUserStore())
-const { $api } = useNuxtApp()
 
 const init = async () => {
   try {

@@ -142,6 +142,7 @@ watch(() => props.show, (value) => {
         class="btn btn-umanao"
         data-bs-dismiss="modal"
         @click="AddOrEditSociety"
+        :disabled="!form.name || form.email || form.society || form.roles.length"
       >
         {{ props.idUser ? 'Modifier' : 'Ajouter' }}
       </button>

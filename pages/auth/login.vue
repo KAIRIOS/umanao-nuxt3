@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const { setUser, setToken } = useUserStore()
-import { reloadNuxtApp } from "nuxt/app";
 
 const user = ref({
   email: 'mcavata@kairios.fr',
@@ -11,7 +10,6 @@ const login = async () => {
   try {
     const data: any = await $fetch('/api/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: user.value.email,
         password: user.value.password
@@ -20,17 +18,11 @@ const login = async () => {
 
     // On set l'user dans le store
     if (data) {
-
-      console.log('data :', data)
       setToken(data.token)
       setUser(data.user)
     }
     // Rediriger l'utilisateur vers la page d'accueil
-    // navigateTo('/')
-    reloadNuxtApp({
-      path: "/",
-      ttl: 1000, // default 10000
-    });
+    navigateTo('/')
   } catch (e) {
     setToken()
     setUser()

@@ -9,3 +9,11 @@ root: ## Ouvre une session bash.
 .PHONY: dev
 dev: ## lance le serveur de dev
 	@docker-compose exec app npm run dev
+
+.PHONY: build
+build: ## lance le serveur de dev
+	@docker-compose exec app npm run build
+
+.PHONY: preview
+preview: ## lance le serveur de dev
+	@docker-compose exec app npm run preview
