@@ -2,6 +2,16 @@
 import Modal from '~/components/Ui/Modal.vue'
 import { USER_ROLES } from '~/constants/userRole.js'
 
+const emit = defineEmits(['close', 'created', 'updated'])
+const { $api, $notify } = useNuxtApp()
+const { isGranted } = useUserStore()
+
+let userRoles = { ...USER_ROLES }
+if (isGranted('ROLE_MODERATOR')) {
+  delete userRoles['ROLE_ADMIN']
+  delete userRoles['ROLE_MODERATOR']
+}
+
 const props = defineProps<{
   show: Boolean
   idUser?: Number
@@ -19,8 +29,7 @@ const MODEL_USER = {
 
 const form = ref({})
 const societies = ref([])
-const emit = defineEmits(['close', 'created', 'updated'])
-const { $api, $notify } = useNuxtApp()
+const exercices = ref([])
 
 const AddOrEditSociety = async () => {
   try {
@@ -60,13 +69,15 @@ const getSocieties = async () => {
   }))
 }
 
-watch(() => props.show, (value) => {
+watch(() => props.show, async (value) => {
   if (value) {
-    getSocieties()
+    await getSocieties()
     if (props.idUser) {
-      getUser(props.idUser)
+      await getUser(props.idUser)
+      exercices.value = await $api(`exercice/society/${form.value.society}`)
     } else {
       form.value = { ...MODEL_USER }
+      exercices.value = await $api('exercice')
     }
   }
 })
@@ -129,8 +140,18 @@ watch(() => props.show, (value) => {
         <div class="vstack gap-1">
           <span>Rôle</span>
           <select v-model="form.roles" class="form-select">
-            <option v-for="(role, index) in USER_ROLES" :value="index">
+            <option v-for="(role, index) in userRoles" :value="index">
               {{ role }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-2">
+        <div class="vstack gap-1">
+          <span>Exercices</span>
+          <select v-model="form.exercices" class="form-select" multiple>
+            <option v-for="exercice in exercices" :value="exercice.id">
+              {{ exercice.libelle }}
             </option>
           </select>
         </div>
@@ -142,7 +163,7 @@ watch(() => props.show, (value) => {
         class="btn btn-umanao"
         data-bs-dismiss="modal"
         @click="AddOrEditSociety"
-        :disabled="!form.name || form.email || form.society || form.roles.length"
+        :disabled="!form.name || !form.email || !form.society || !form.roles.length"
       >
         {{ props.idUser ? 'Modifier' : 'Ajouter' }}
       </button>

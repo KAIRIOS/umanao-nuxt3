@@ -15,6 +15,7 @@ const adminUser = ref(null)
 const isDelete = ref(false)
 const message = ref(null)
 const { $notify, $api } = useNuxtApp()
+const { isGranted } = useUserStore()
 
 const showModal = reactive({
   society: false,
@@ -139,14 +140,14 @@ watch(() => isDelete.value, async (value) => {
     />
 
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="societies-tab-pane" role="tabpanel" aria-labelledby="societies-tab" tabindex="0">
+      <div v-if="isGranted('ROLE_ADMIN')" id="societies-tab-pane" class="tab-pane fade" :class="{ active: isGranted('ROLE_ADMIN'), show: isGranted('ROLE_ADMIN') }" role="tabpanel" aria-labelledby="societies-tab" tabindex="0">
         <AdministrationSocietes
           ref="adminSociety"
           @edit="editSociety($event)"
           @delete="handleDeleteSociety($event)"
         />
       </div>
-      <div class="tab-pane fade" id="users-tab-pane" role="tabpanel" aria-labelledby="users-tab" tabindex="0">
+      <div id="users-tab-pane" class="tab-pane fade" :class="{ active: isGranted('ROLE_MODERATOR'), show: isGranted('ROLE_MODERATOR') }" role="tabpanel" aria-labelledby="users-tab" tabindex="0">
         <AdministrationUsers
           ref="adminUser"
           @edit="editUser($event)"

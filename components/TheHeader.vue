@@ -57,7 +57,7 @@ function goHome() {
         icon="fas fa-sign-in-alt"
       />
       <Button
-        v-if="token && isGranted('ROLE_ADMIN')"
+        v-if="token && (isGranted('ROLE_MODERATOR') || isGranted('ROLE_ADMIN'))"
         class="btn-umanao"
         label="Administration"
         link="/administration"

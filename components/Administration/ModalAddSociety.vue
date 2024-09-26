@@ -13,23 +13,30 @@ const MODEL_SOCIETY = {
   adresse: null,
   zipCode: null,
   city: null,
+  exercices: [],
 }
 
 const emit = defineEmits(['close', 'created'])
 
 const form = ref({})
+const exercicesSelected = ref([])
+const exercices = ref([])
 const { $api } = useNuxtApp();
 
-watch(() => props.show, (value) => {
+watch(() => props.show, async (value) => {
   if (value && props.idSociety) {
-    getSociety(props.idSociety)
+    await getSociety(props.idSociety)
   } else {
     form.value = { ...MODEL_SOCIETY }
   }
+  exercices.value = await $api('exercice')
 })
 
 const getSociety = async (idSociety) => {
   form.value = await $api(`society/${idSociety}`)
+  form.value.exercices.forEach((exercice) => {
+    exercicesSelected.value.push(exercice.id)
+  })
 }
 
 const AddOrEditSociety = async () => {
@@ -94,6 +101,16 @@ const AddOrEditSociety = async () => {
           <div class="vstack gap-2">
             <label for="ville">Ville</label>
             <input v-model="form.city" class="form-control" type="text" id="ville" />
+          </div>
+        </div>
+        <div class="mb-2">
+          <div class="vstack gap-1">
+            <span>Exercices</span>
+            <select v-model="form.exercices" class="form-select" multiple>
+              <option v-for="exercice in exercices" :value="exercice.id" :selected="exercicesSelected.includes(exercice.id)">
+                {{ exercice.libelle }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
