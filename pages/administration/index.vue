@@ -13,6 +13,7 @@ const idUser = ref(null)
 const adminSociety = ref(null)
 const adminUser = ref(null)
 const isDelete = ref(false)
+const isReset = ref(false)
 const message = ref(null)
 const { $notify, $api } = useNuxtApp()
 const { isGranted } = useUserStore()
@@ -20,6 +21,7 @@ const { isGranted } = useUserStore()
 const showModal = reactive({
   society: false,
   user: false,
+  reset: false,
   delete: false,
 })
 
@@ -44,6 +46,11 @@ const handleOpenModalUser = () => {
   showModal.user = true
 }
 
+const handleCloseModalReset = (forReset = false) => {
+  isReset.value = forReset
+  showModal.reset = false
+} 
+
 const handleCloseModalDelete = (forDelete = false) => {
   isDelete.value = forDelete
   showModal.delete = false
@@ -63,10 +70,29 @@ const editUser = (id) => {
   }
 }
 
+const resetPassword = async (idUser) => {
+  try {
+    await $api(`user/reset-password/${idUser}` )
+    $notify('success', "L'email a été envoyé à l'utilisateur")
+    initUser()
+  } catch (e) {
+    if (e.response?._data?.error_description) {
+      $notify('error', e.response._data.error_description[0])
+    } else {
+      $notify('error', "Erreur lors du reset du password de l'utilisateur")
+    }
+  }
+}
+
 const handleDeleteSociety = (id) => {
   idSociety.value = id
   showModal.delete = true
   message.value = 'Vous êtes sûr de vouloir supprimer cette société ?'
+}
+
+const handleResetPassword = (id) => {
+  idUser.value = id
+  showModal.reset = true
 }
 
 const handleDeleteUser = (id) => {
@@ -116,6 +142,7 @@ const initValue = () => {
   idSociety.value = null
   idUser.value = null
   isDelete.value = false
+  isReset.value = false
 }
 // End Fonctions
 
@@ -126,6 +153,12 @@ watch(() => isDelete.value, async (value) => {
 
   if (value && idSociety.value) await deleteSociety(idSociety.value)
   if (value && idUser.value) await deleteUser(idUser.value)
+})
+
+watch(() => isReset.value, async (value) => {
+  if (!value) return 
+
+  if (idUser.value) await resetPassword(idUser.value)
 })
 
 </script>
@@ -151,6 +184,7 @@ watch(() => isDelete.value, async (value) => {
         <AdministrationUsers
           ref="adminUser"
           @edit="editUser($event)"
+          @reset-password="handleResetPassword($event)"
           @delete="handleDeleteUser($event)"
         />
       </div>
@@ -181,6 +215,18 @@ watch(() => isDelete.value, async (value) => {
       </div>
       <template #footer>
         <Button class="btn-umanao" label="Valider" type="button" data-bs-dismiss="modal" @click="handleCloseModalDelete(true)" />
+      </template>
+    </Modal>
+
+    <Modal :show="showModal.reset" :show-close="true" @close="handleCloseModalReset">
+      <template #header>
+        <h5 class="modal-title">Confirmation de reset de mot de passe</h5>
+      </template>
+      <div>
+        <p>Un mail va être envoyé pour la réinitialisation du mot de passe</p>
+      </div>
+      <template #footer>
+        <Button class="btn-umanao" label="Valider" type="button" data-bs-dismiss="modal" @click="handleCloseModalReset(true)" />
       </template>
     </Modal>
   </div>

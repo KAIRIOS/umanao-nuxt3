@@ -4,7 +4,7 @@ import { USER_ROLES } from '~/constants/userRole.js'
 import Loading from '~/components/Ui/Loading.vue'
 
 const { $api } = useNuxtApp();
-const emit = defineEmits(['edit', 'delete'])
+const emit = defineEmits(['edit', 'reset-password', 'delete'])
 let users = ref([])
 
 const isLoading = reactive({
@@ -66,6 +66,7 @@ defineExpose({
         <td style="width: 100px">
           <div class="hstack gap-2">
             <Button class="btn-umanao" small icon="fas fa-edit" @click="emit('edit', user.id)" />
+            <Button class="btn-umanao" small icon="fas fa-envelope" @click="emit('reset-password', user.id)" />
             <Button class="btn-danger" small icon="fas fa-trash" @click="emit('delete', user.id)" />
           </div>
         </td>
