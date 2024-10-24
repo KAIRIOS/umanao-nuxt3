@@ -19,9 +19,8 @@ function handleClick() {
 
 </script>
 
-<template>
-  <div ref="parentOfDrag" class="custom-node-container vstack justify-content-between gap-2">
-    {{ props.data.value }}
+<template> 
+  <div ref="parentOfDrag" class="vstack justify-content-between gap-2 custom-node-container">
     <draggable
       v-model="props.data.card"
       tag="div"
@@ -38,7 +37,7 @@ function handleClick() {
           :class="{ card: 'card' }"
           v-show="{ index }"
         >
-          <div class="card-body border textClass" style="height: 235px;">
+          <div class="card-body border text-class" style="height: 235px;">
             <div class="card-text">
               {{ element.texte }}
             </div>
@@ -56,7 +55,7 @@ function handleClick() {
   width: 250px;
   height: 250px;
 }
-.textClass {
+.text-class {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 7;

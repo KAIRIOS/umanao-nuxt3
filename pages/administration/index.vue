@@ -160,7 +160,6 @@ watch(() => isReset.value, async (value) => {
 
   if (idUser.value) await resetPassword(idUser.value)
 })
-
 </script>
 
 <template>

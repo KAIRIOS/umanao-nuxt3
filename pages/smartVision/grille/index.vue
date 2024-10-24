@@ -3,9 +3,9 @@
     <div class="row">
       <div class="col-md-2 vstack gap-2">
         <div class="hstack gap-2">
-          <NuxtLink to="/smartVision/card" class="btn btn-umanao color-black">Etape 1</NuxtLink>
-          <NuxtLink to="/smartVision/card/repartition" class="btn btn-umanao color-black">Etape 2</NuxtLink>
-          <Button class="btn btn-umanao color-black" :disabled="loading || nbCardForSave > 0" @click="saveResult">Terminer</Button>
+          <NuxtLink v-if="!finishExercice" to="/smartVision/card" class="btn btn-umanao color-black">Etape 1</NuxtLink>
+          <NuxtLink v-if="!finishExercice" to="/smartVision/card/repartition" class="btn btn-umanao color-black">Etape 2</NuxtLink>
+          <Button class="btn btn-umanao color-black" :disabled="loading || nbCardForSave > 0 || finishExercice" @click="saveResult">Terminer</Button>
         </div>
         <h3 class="m-0">Consignes</h3>
         <div class="vstack gap-2">
@@ -190,7 +190,6 @@
   </div>
 </template>
 <script setup lang="ts">
-
 definePageMeta({
   name: 'grille',
   middleware: 'auth'
@@ -215,6 +214,7 @@ const cardsPeuImportant = ref([]);
 const cardsMoinsImportant = ref([]);
 const cardsVeryImportant = ref([]);
 const cardForResult = ref([])
+const finishExercice = ref(false)
 const nbCardForSave = computed({
   get() {
     return cardsPasImportant.value.length + cardsPeuImportant.value.length + cardsMoinsImportant.value.length + cardsVeryImportant.value.length
@@ -293,6 +293,8 @@ const saveResult = async () => {
       method: 'POST',
       body: cardForResult.value,
     })
+    $notify('success', 'Le résultat de votre exercice à bien été sauvegarder')
+    finishExercice.value = true
   } catch(e) {
     if (e.response?._data?.error_description) {
       $notify('error', e.response._data.error_description)

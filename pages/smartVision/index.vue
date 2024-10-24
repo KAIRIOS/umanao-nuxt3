@@ -6,6 +6,25 @@ definePageMeta({
 
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
 
+const { $api, $notify } = useNuxtApp();
+const { isGranted } = useUserStore()
+
+const results = ref([])
+
+const init = async () => {
+  try {
+    // TODO: peut être à améliorer car id en dur
+    results.value = await $api('exercice/result/1')
+  } catch(e) {
+    if (e.response?._data?.error_description) {
+      $notify('error', e.response._data.error_description)
+      if (e?.response?.status === 403) navigateTo('/')
+    } else {
+      $notify('error', 'Erreur lors de la sauvegarde du résultat')
+    }
+  }
+}
+
 const participantName = ref("");
 const startSession = function () {
   nuxtStorage.localStorage.setData("player", participantName.value);
@@ -16,11 +35,25 @@ const resetSession = function () {
   nuxtStorage.localStorage.clear();
   alert("La session est re-initialisé");
 }
+
+onMounted(() => {
+  if (!isGranted('ROLE_ADMIN')) {
+    init()
+  }
+})
 </script>
 
 <template>
   <div class="container-fluid">
-    <div class="vstack gap-5">
+    <div v-if="results.length > 0" class="vstack gap-5">
+      <div class="vstack gap-3">
+        <h3>UMANAO SMART VISION®</h3>
+        <div class="vstack gap-3">
+          <span>Merci d'avoir participé a cet exercice.</span>
+        </div>
+      </div>
+    </div>
+    <div v-else class="vstack gap-5">
       <div class="vstack gap-3">
         <h3>UMANAO SMART VISION®</h3>
         <div class="vstack gap-3">

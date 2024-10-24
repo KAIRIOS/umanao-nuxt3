@@ -11,10 +11,11 @@ const props = defineProps<{
 const { $api, $notify } = useNuxtApp();
 const emit = defineEmits(['close'])
 
-const form = ref({})
 const modalCard = ref(false)
 const idCard = ref(null)
 const cards = ref([])
+const modalDelete = ref(false)
+const cardForDelete = ref(null)
  
 const openModalAddCard = () => {
   idCard.value = null
@@ -26,6 +27,29 @@ const openModalEditCard = (cardId) => {
   modalCard.value = true
 }
 
+const closeModalDelete = async (forDelete = false) => {
+  try {
+    if (forDelete) {
+      await $api(`exercice/card`, {
+        method: 'DELETE',
+        body: JSON.stringify({ id: cardForDelete.value }),
+      })
+      cards.value = await $api(`exercice/card`)
+    } else {
+      cardForDelete.value = null
+    }
+  } catch (e) {
+    if (e.response?._data?.error_description) {
+      $notify('error', e.response._data.error_description[0])
+    } else {
+      $notify('error', "Erreur lors de la suppression de la carte")
+    }
+    console.log('error', e)
+  } finally {
+    modalDelete.value = false
+  }
+}
+
 const addCard = (card) => {
   cards.value.push(card)
 }
@@ -33,6 +57,11 @@ const addCard = (card) => {
 const editCard = (card) => {
   const index = cards.value.findIndex((c) => c.id === card.id)
   cards.value[index] = card
+}
+
+const deleteCard = (cardId) => {
+  modalDelete.value = true
+  cardForDelete.value = cardId
 }
 
 watch(() => props.show, async (value) => {
@@ -75,7 +104,10 @@ watch(() => props.show, async (value) => {
               <div v-for="card in cards" :key="card.id" class="card p-2 mb-2">
                 <div class="hstack justify-content-between">
                   <h5>{{ card.libelle }}</h5>
-                  <Button class="btn-umanao" icon="fas fa-edit" @click="openModalEditCard(card.id)" />
+                  <div class="hstack gap-2">
+                    <Button class="btn-danger" icon="fas fa-trash" @click="deleteCard(card.id)" />
+                    <Button class="btn-umanao" icon="fas fa-edit" @click="openModalEditCard(card.id)" />
+                  </div>
                 </div>
                 <span>{{ card.texte }}</span>
               </div>
@@ -83,6 +115,17 @@ watch(() => props.show, async (value) => {
           </div>
         </div>
       </div>
+      <Modal :show="modalDelete" :show-close="true" @close="closeModalDelete(false)">
+        <template #header>
+          <h5 class="modal-title">Confirmation de suppression</h5>
+        </template>
+        <div>
+          <p>Etes vous sur de vouloir supprimer cette carte ?</p>
+        </div>
+        <template #footer>
+          <Button class="btn-umanao" label="Valider" type="button" data-bs-dismiss="modal" @click="closeModalDelete(true)" />
+        </template>
+      </Modal>
     </div>
   </Modal>
 </template>
