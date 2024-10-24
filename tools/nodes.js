@@ -4,8 +4,8 @@ export default {
    */
   generate(x, y, startValue = 1) {
     const nodes = []
-    let id = 1;
-    for (let yi = 0; yi < y; yi++) {
+    let id = startValue;
+    for (let yi = 10; yi > y; yi--) {
       for (let xi = 0; xi < x; xi++) {
         nodes.push({
           id: '' + xi + '-' + yi,

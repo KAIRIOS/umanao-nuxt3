@@ -5,6 +5,7 @@
         <div class="hstack gap-2">
           <NuxtLink to="/smartVision/card" class="btn btn-umanao color-black">Etape 1</NuxtLink>
           <NuxtLink to="/smartVision/card/repartition" class="btn btn-umanao color-black">Etape 2</NuxtLink>
+          <Button class="btn btn-umanao color-black" :disabled="loading || nbCardForSave > 0" @click="saveResult">Terminer</Button>
         </div>
         <h3 class="m-0">Consignes</h3>
         <div class="vstack gap-2">
@@ -174,7 +175,7 @@
             >
               <!-- bind your custom node type to a component by using slots, slot names are always `node-<type>` -->
               <template #node-special="specialNodeProps">
-                <CustomNode v-bind="specialNodeProps" @delete="deleteCard" @click="handleNodeClick($event)"/>
+                <CustomNode v-bind="specialNodeProps" @added="handleAdd" @click="handleNodeClick($event)" @delete="deleteCard" />
               </template>
               <Controls>
                 <ControlButton>
@@ -195,6 +196,7 @@ definePageMeta({
   middleware: 'auth'
 })
 
+import Button from '~/components/Ui/Button.vue'
 import { VueFlow } from '@vue-flow/core'
 import { Controls, ControlButton } from '@vue-flow/controls'
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
@@ -203,16 +205,31 @@ import CustomNode from '~/components/CustomNode.vue'
 import nodesTools from '~/tools/nodes.js'
 import { ref } from 'vue'
 
-const elements = ref(nodesTools.generate(10, 10, 1))
-const idLastReposition = ref(null);
+const { $api, $notify } = useNuxtApp();
+const elements = ref(nodesTools.generate(10, 0, 1))
 
+const loading = ref(false)
+const idLastReposition = ref(null);
 const cardsPasImportant = ref([]);
 const cardsPeuImportant = ref([]);
 const cardsMoinsImportant = ref([]);
 const cardsVeryImportant = ref([]);
+const cardForResult = ref([])
+const nbCardForSave = computed({
+  get() {
+    return cardsPasImportant.value.length + cardsPeuImportant.value.length + cardsMoinsImportant.value.length + cardsVeryImportant.value.length
+  },
+  set(value) {
+    console.log('change value => ', value)
+  }
+})
 
 let cloneCard = ref(null)
 const flow = ref(null)
+
+function handleAdd(event) {
+  cardForResult.value.push(event)
+}
 
 function handleNodeClick({ parent }) {
   // On récupère tous les nodes de la grille
@@ -226,22 +243,12 @@ function handleNodeClick({ parent }) {
   const dataCardNodeSelected = nodeSelected.data.card
 
   deleteCard(dataCardNodeSelected)
-  nodeSelected.data.card = []
 
-  // if (!cloneCard.value && !dataCardNodeSelected.length) return
-  // if (cloneCard.value && dataCardNodeSelected.length) return
-  //
-  // if (!cloneCard.value && dataCardNodeSelected.length) {
-  //   cloneCard.value = dataCardNodeSelected
-  //   nodeSelected.data.card = []
-  //   return
-  // }
-  //
-  // if (cloneCard.value && !dataCardNodeSelected.length) {
-  //   nodeSelected.data.card.push(cloneCard.value[0])
-  //   cloneCard.value = null
-  //   return
-  // }
+  // On delete la card du résult
+  const indexForResult = cardForResult.value.findIndex((cr) => cr.card.id === dataCardNodeSelected[0].id)
+  cardForResult.value.splice(indexForResult, 1)
+
+  nodeSelected.data.card = []
 }
 
 function deleteCard(cardFromGrill) {
@@ -276,6 +283,25 @@ function deleteCard(cardFromGrill) {
   if (indexVeryImportant !== -1) {
     cardsVeryImportant.value.unshift(card)
     return
+  }
+}
+
+const saveResult = async () => {
+  try {
+    loading.value = true
+    await $api('exercice/result', {
+      method: 'POST',
+      body: cardForResult.value,
+    })
+  } catch(e) {
+    if (e.response?._data?.error_description) {
+      $notify('error', e.response._data.error_description)
+      if (e?.response?.status === 403) navigateTo('/')
+    } else {
+      $notify('error', 'Erreur lors de la sauvegarde du résultat')
+    }
+  } finally {
+    loading.value = false
   }
 }
 

@@ -3,7 +3,7 @@ import Button from '~/components/Ui/Button.vue'
 import { USER_ROLES } from '~/constants/userRole.js'
 import Loading from '~/components/Ui/Loading.vue'
 
-const { $api } = useNuxtApp();
+const { $api, $notify } = useNuxtApp();
 const emit = defineEmits(['edit', 'reset-password', 'delete'])
 let users = ref([])
 
@@ -57,7 +57,7 @@ defineExpose({
           <span>Aucun résultat</span>
         </td>
       </tr>
-      <tr v-for="user in users">
+      <tr v-for="user in users" :key="user.id">
         <td>{{ user?.name }}</td>
         <td>{{ user?.firstname }}</td>
         <td>{{ user?.active ? 'Actif' : 'Non Actif' }}</td>

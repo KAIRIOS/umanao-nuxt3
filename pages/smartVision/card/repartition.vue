@@ -208,7 +208,6 @@ definePageMeta({
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
 import draggable from "vuedraggable";
 import { ref } from 'vue'
-import cardsSource from 'assets/datas/cards.json'
 
 const cardsImportant = ref([]);
 const cardsNoImportant = ref([]);

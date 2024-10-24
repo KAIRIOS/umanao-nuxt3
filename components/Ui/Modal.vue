@@ -2,9 +2,11 @@
 const props = withDefaults(defineProps<{
   show?: boolean,
   showClose?: boolean,
+  large?: boolean
 }>(), {
   show: false,
   showClose: true,
+  large: false,
 })
 
 const { show, showClose } = toRefs(props)
@@ -34,7 +36,7 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="modal" class="modal fade" tabindex="-1" :aria-hidden="!show">
+  <div ref="modal" class="modal fade" :class="{ 'modal-lg': large}" tabindex="-1" :aria-hidden="!show">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div v-if="$slots.header" class="modal-header">

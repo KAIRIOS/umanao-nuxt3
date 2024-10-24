@@ -1,19 +1,17 @@
 <script setup>
 import draggable from "vuedraggable";
 
-const emit = defineEmits(['click'])
+const emit = defineEmits(['click', 'added'])
 const props = defineProps(['data'])
 const parentOfDrag = ref(null)
 
-function cutText(value, strLength = 30) {
-  if (typeof value !== 'string') return ''
-  if (value.length <= strLength) return value
-
-  return value.substring(0, strLength) + (value.length > strLength ? '...' : '')
+function handleChange(event) {
+  if (event?.added) {
+    emit('added', {value: props.data.value, card: event.added.element})
+  }
 }
 
 function handleClick() {
-  // On stop le click d'event pour ne pas déclencher le click de draggable
   emit('click', {
     parent: parentOfDrag.value,
   })
@@ -23,12 +21,14 @@ function handleClick() {
 
 <template>
   <div ref="parentOfDrag" class="custom-node-container vstack justify-content-between gap-2">
+    {{ props.data.value }}
     <draggable
       v-model="props.data.card"
       tag="div"
       itemKey="id"
       group="cardElement"
       class="vstack gap-3"
+      @change="handleChange"
       @click.stop="handleClick"
     >
       <template #item="{ element, index }">

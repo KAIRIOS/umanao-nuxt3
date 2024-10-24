@@ -49,7 +49,7 @@ onMounted(() => {
     <div v-else>
       <div class="hstack gap-2">
         <div v-if="exercices" class="hstack gap-2">
-          <NuxtLink v-for="exercice in exercices" :key="exercice.id" :to="exercice.link" class="btn btn btn-primary">
+          <NuxtLink v-for="exercice in exercices" :key="exercice.id" :to="exercice.link" class="btn btn-primary">
             {{ exercice.libelle }}
           </NuxtLink>
         </div>

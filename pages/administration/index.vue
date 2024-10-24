@@ -188,6 +188,9 @@ watch(() => isReset.value, async (value) => {
           @delete="handleDeleteUser($event)"
         />
       </div>
+      <div id="exercices-tab-pane" class="tab-pane fade" :class="{ show: isGranted('ROLE_MODERATOR') }" role="tabpanel" aria-labelledby="exercices-tab" tabindex="0">
+        <AdministrationExercices />
+      </div>
     </div>
 
     <AdministrationModalAddSociety

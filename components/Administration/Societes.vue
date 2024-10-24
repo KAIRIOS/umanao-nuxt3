@@ -58,7 +58,7 @@ defineExpose({
           <span>Aucun résultat</span>
         </td>
       </tr>
-      <tr v-for="society in societes">
+      <tr v-for="society in societes" :key="society.id">
         <td>{{ society?.name }}</td>
         <td>{{ society?.siret }}</td>
         <td>{{ society?.adresse }}</td>

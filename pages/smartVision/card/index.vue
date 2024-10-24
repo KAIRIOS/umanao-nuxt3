@@ -118,17 +118,19 @@ definePageMeta({
   middleware: 'auth'
 })
 
-import cardsSource from "~/assets/datas/cards.json";
 import draggable from "vuedraggable";
 import nuxtStorage from 'nuxt-storage/nuxt-storage'
 
+const { $api, $notify } = useNuxtApp();
 const cardImportant = ref([]);
 const cardNoImportant = ref([]);
-const cardsSources = ref([...cardsSource]);
+const cardsSources = ref([]);
 const error = ref('');
 const save = ref('');
 
 onMounted(() => {
+  getCardsSource();
+
   // On recupère les cartes présente dans le localStorage
   const cardImportantStorage = JSON.parse(nuxtStorage.localStorage.getData('cardImportant'));
   const cardNoImportantStorage = JSON.parse(nuxtStorage.localStorage.getData('cardNoImportant'));
@@ -144,6 +146,15 @@ onMounted(() => {
     cardNoImportant.value = cardNoImportantStorage
   }
 })
+
+const getCardsSource = async () => {
+  try {
+    cardsSources.value = []
+    cardsSources.value = await $api('exercice/card')
+  } catch (e) {
+    $notify('error', 'Erreur lors de la récuprération des cartes.')
+  }
+}
 
 // Permet de supprimer les cartes présentes dans le localStorage
 function deleteCardFromStorage(cardsStorage, cardsSources) {
@@ -174,7 +185,7 @@ function resetCards() {
   // On reset les cartes dans les différentes listes
   cardImportant.value = []
   cardNoImportant.value = []
-  cardsSources.value = [...cardsSource]
+  getCardsSource();
   // On delete les cartes dans le localStorage
   nuxtStorage.localStorage.removeItem('cardImportant')
   nuxtStorage.localStorage.removeItem('cardNoImportant')

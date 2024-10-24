@@ -9,11 +9,13 @@ const emit = defineEmits(['openModalSociety', 'openModalUser'])
 let tabs = reactive({
   societe: isGranted('ROLE_ADMIN'),
   users: isGranted('ROLE_MODERATOR'),
+  exercices: isGranted('ROLE_MODERATOR'),
 })
 
 const changeActiveTab = (tab) => {
   tabs.societe = tab === 'societies'
   tabs.users = tab === 'users'
+  tabs.exercices = tab === 'exercices'
 }
 
 </script>
@@ -51,6 +53,21 @@ const changeActiveTab = (tab) => {
           @click="changeActiveTab('users')"
         >
           Utilisateurs
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link exercices"
+          id="exercices-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#exercices-tab-pane"
+          type="button"
+          role="tab"
+          aria-controls="exercices-tab-pane"
+          aria-selected="false"
+          @click="changeActiveTab('exercices')"
+        >
+          Exercices
         </button>
       </li>
     </ul>
